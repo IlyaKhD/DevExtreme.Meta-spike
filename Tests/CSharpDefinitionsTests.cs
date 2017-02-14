@@ -18,10 +18,12 @@ namespace Tests {
                         [
                             {
                                 ""name"": ""prop1"",
+                                ""types"": [ ""number"" ],
                                 ""default"": 123
                             },
                             {
                                 ""name"": ""prop3"",
+                                ""types"": [ ""string"" ],
                                 ""default"": ""def""
                             }
                         ]
@@ -32,10 +34,12 @@ namespace Tests {
                         [
                             {
                                 ""name"": ""prop1"",
+                                ""types"": [ ""number"" ],
                                 ""default"": 123
                             },
                             {
                                 ""name"": ""prop2"",
+                                ""types"": [ ""string"" ],
                                 ""default"": ""abc""
                             }
                         ]
@@ -46,10 +50,12 @@ namespace Tests {
                         [
                             {
                                 ""name"": ""prop4"",
+                                ""types"": [ ""string"" ],
                                 ""default"": ""xyz""
                             },
                             {
                                 ""name"": ""prop2"",
+                                ""types"": [ ""string"" ],
                                 ""default"": ""abc""
                             }
                         ]
@@ -59,6 +65,31 @@ namespace Tests {
             #endregion
 
             var sample = new CSharpDefinitions.PropertyMap.Sample();
+
+            Assert.AreEqual(Utils.NormalizeJson(expected), Utils.NormalizeJson(sample.GetMeta()));
+        }
+
+        [Test]
+        public void ProvidesGenericProp() {
+            #region expected
+            var expected = @"
+                [
+                    {
+                        ""name"": ""classA"",
+                        ""props"": 
+                        [
+                            {
+                                ""name"": ""prop1"",
+                                ""types"": [ ""number"", ""string"" ],
+                                ""default"": ""abc""
+                            }
+                        ]
+                    }
+                ]
+            ";
+            #endregion
+
+            var sample = new CSharpDefinitions.GenericProp.Sample();
 
             Assert.AreEqual(Utils.NormalizeJson(expected), Utils.NormalizeJson(sample.GetMeta()));
         }

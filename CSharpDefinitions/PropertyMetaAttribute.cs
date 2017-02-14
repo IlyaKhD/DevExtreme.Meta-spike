@@ -8,10 +8,12 @@ namespace CSharpDefinitions {
 
     [AttributeUsage(AttributeTargets.Property)]
     class PropertyMetaAttribute : Attribute {
-        public readonly PropertyMeta Meta;
+        public readonly string Name;
+        public readonly object DefaultValue;
 
         public PropertyMetaAttribute(string name, object defaultValue) {
-            Meta = new PropertyMeta(name, defaultValue);
+            Name = name;
+            DefaultValue = defaultValue;
         }
     }
 

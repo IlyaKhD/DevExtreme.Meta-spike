@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="ClassMeta.cs" />
     <Compile Include="ClassMetaAttribute.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="GenericProp\Sample.cs" />
+    <Compile Include="GenericValue.cs" />
     <Compile Include="LowerCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />

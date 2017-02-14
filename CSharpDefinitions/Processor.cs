@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CSharpDefinitions.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +35,41 @@ namespace CSharpDefinitions {
 
             return ownProps
                 .Concat(interfaceProps)
-                .Select(p => p.GetCustomAttribute<PropertyMetaAttribute>())
-                .Where(p => p != null)
-                .Select(p => p.Meta);
+                .Where(p => Attribute.IsDefined(p, typeof(PropertyMetaAttribute)))
+                .Select(p => CreatePropMeta(p));
+        }
+
+        static PropertyMeta CreatePropMeta(PropertyInfo prop) {
+            var metaAttr = prop.GetCustomAttribute<PropertyMetaAttribute>();
+
+            return new PropertyMeta(
+                metaAttr.Name,
+                metaAttr.DefaultValue,
+                GetPropTypes(prop)
+            );
+        }
+
+        static IEnumerable<string> GetPropTypes(PropertyInfo prop) {
+            var propType = prop.PropertyType;
+
+            if(!typeof(IGenericValue).IsAssignableFrom(propType)) {
+                yield return GetTypeName(propType);
+                yield break;
+            }
+
+            foreach(var type in propType.GetGenericArguments())
+                yield return GetTypeName(type);
+        }
+
+        static string GetTypeName(Type type) {
+
+            if(type == typeof(string))
+                return "string";
+
+            if(type == typeof(int))
+                return "number";
+
+            throw new Exception($"Unknown type: '{type.FullName}'");
         }
     }
 
