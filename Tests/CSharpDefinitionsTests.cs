@@ -64,7 +64,7 @@ namespace Tests {
             ";
             #endregion
 
-            var sample = new CSharpDefinitions.PropertyMap.Sample();
+            var sample = new CSharpDefinitions.Samples.PropertyMap();
 
             Assert.AreEqual(Utils.NormalizeJson(expected), Utils.NormalizeJson(sample.GetMeta()));
         }
@@ -89,7 +89,7 @@ namespace Tests {
             ";
             #endregion
 
-            var sample = new CSharpDefinitions.GenericProp.Sample();
+            var sample = new CSharpDefinitions.Samples.GenericProp();
 
             Assert.AreEqual(Utils.NormalizeJson(expected), Utils.NormalizeJson(sample.GetMeta()));
         }
