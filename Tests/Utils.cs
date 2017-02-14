@@ -5,17 +5,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Tests
-{
+namespace Tests {
 
-    static class Utils
-    {
+    static class Utils {
 
-        public static string NormalizeJson(string jsonString)
-        {
+        public static string NormalizeJson(string jsonString) {
             return
-                Regex.Replace
-                (
+                Regex.Replace (
                     Regex.Replace(jsonString, @"\s+", " "),
                     @"(?<=:) | (?=:)| (?={)|(?<={) | (?=})|(?<=}) |(?<=,) | (?=,) | (?=\[)|(?<=\[) | (?=\])|(?<=\])", String.Empty
                 )

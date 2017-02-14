@@ -4,16 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions
-{
+namespace CSharpDefinitions {
 
     [AttributeUsage(AttributeTargets.Class)]
-    class ClassMetaAttribute : Attribute
-    {
+    class ClassMetaAttribute : Attribute {
         public readonly string Name;
 
-        public ClassMetaAttribute(string name)
-        {
+        public ClassMetaAttribute(string name) {
             Name = name;
         }
 

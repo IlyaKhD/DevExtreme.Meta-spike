@@ -4,16 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions
-{
+namespace CSharpDefinitions {
 
-    struct ClassMeta
-    {
+    struct ClassMeta {
         public readonly string Name;
         public readonly PropertyMeta[] Props;
 
-        public ClassMeta(string name, IEnumerable<PropertyMeta> props)
-        {
+        public ClassMeta(string name, IEnumerable<PropertyMeta> props) {
             Name = name;
             Props = props.ToArray();
         }

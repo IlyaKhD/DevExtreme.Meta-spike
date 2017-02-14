@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions
-{
+namespace CSharpDefinitions {
 
-    class Program
-    {
+    class Program {
 
-        static void Main(string[] args)
-        {
+        static void Main(string[] args) {
         }
     }
 

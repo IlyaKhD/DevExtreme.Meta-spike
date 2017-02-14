@@ -4,16 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions
-{
+namespace CSharpDefinitions {
 
     [AttributeUsage(AttributeTargets.Property)]
-    class PropertyMetaAttribute : Attribute
-    {
+    class PropertyMetaAttribute : Attribute {
         public readonly PropertyMeta Meta;
 
-        public PropertyMetaAttribute(string name, object defaultValue)
-        {
+        public PropertyMetaAttribute(string name, object defaultValue) {
             Meta = new PropertyMeta(name, defaultValue);
         }
     }

@@ -4,16 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions
-{
+namespace CSharpDefinitions {
 
-    struct PropertyMeta
-    {
+    struct PropertyMeta {
         public readonly string Name;
         public readonly object Default;
 
-        public PropertyMeta(string name, object defaultValue)
-        {
+        public PropertyMeta(string name, object defaultValue) {
             Name = name;
             Default = defaultValue;
         }

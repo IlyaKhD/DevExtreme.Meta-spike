@@ -1,15 +1,13 @@
 ﻿using NUnit.Framework;
 using System;
 
-namespace Tests
-{
+namespace Tests {
+
     [TestFixture]
-    public class CSharpDefinitionsTests
-    {
+    public class CSharpDefinitionsTests {
 
         [Test]
-        public void ProvidesPropertyMap()
-        {
+        public void ProvidesPropertyMap() {
             #region expected
             var expected =
             @"
