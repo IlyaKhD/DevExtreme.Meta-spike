@@ -16,8 +16,6 @@ namespace CSharpDefinitions.Samples {
             }
         );
 
-#warning currently iherited props return stub values just to be short and compilable. May be we could use these values for meta needs (e.g. default value)
-
         class ClassA : Prop1, Prop3 {
 
             public int Prop1 => Any.INT;
