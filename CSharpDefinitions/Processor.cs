@@ -10,18 +10,13 @@ using System.Threading.Tasks;
 namespace CSharpDefinitions {
 
     public class Processor {
+        public const int NOVAL_INT = Int32.MaxValue;
+        public const string NOVAL_STRING = "29ba8527a456401dafa26a108c6731a3";
+
         const BindingFlags PROPS_BINDING = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance;
 
         public string GetMeta(IEnumerable<Type> types) {
-            var result = new List<ClassMeta>();
-
-            foreach(var type in types) {
-                var metaAttr = type.GetCustomAttribute<ClassMetaAttribute>();
-                if(metaAttr == null)
-                    continue;
-
-                result.Add(new ClassMeta(metaAttr.Name, GetClassProps(type)));
-            }
+            var result = types.Select(t => new ClassMeta(t.Name.ToLowerCamelCase(), GetClassProps(t)));
 
             return JsonConvert.SerializeObject(
                 result,
@@ -30,21 +25,25 @@ namespace CSharpDefinitions {
         }
 
         static IEnumerable<PropertyMeta> GetClassProps(Type type) {
-            var interfaceProps = type.GetInterfaces().SelectMany(i => i.GetProperties(PROPS_BINDING));
-            var ownProps = type.GetProperties(PROPS_BINDING);
+            var instance = Activator.CreateInstance(type);
 
-            return ownProps
-                .Concat(interfaceProps)
-                .Where(p => Attribute.IsDefined(p, typeof(PropertyMetaAttribute)))
-                .Select(p => CreatePropMeta(p));
+            var interfaceProps = type.GetInterfaces()
+                .SelectMany(i => i.GetProperties(PROPS_BINDING))
+                .Select(p => CreatePropMeta(p, p.GetCustomAttribute<PropertyValueAttribute>()?.Value));
+
+            var ownProps = type.GetProperties(PROPS_BINDING)
+                .Select(p => CreatePropMeta(p, p.GetValue(instance)))
+                .Except(interfaceProps, PropertyMeta.Comparer);
+
+            return ownProps.Concat(interfaceProps);
         }
 
-        static PropertyMeta CreatePropMeta(PropertyInfo prop) {
-            var metaAttr = prop.GetCustomAttribute<PropertyMetaAttribute>();
+        static PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {
+            var defaultValue = propValue is IGenericValue ? ((IGenericValue)propValue).Value : propValue;
 
             return new PropertyMeta(
-                metaAttr.Name,
-                metaAttr.DefaultValue,
+                prop.Name.ToLowerCamelCase(),
+                defaultValue,
                 GetPropTypes(prop)
             );
         }

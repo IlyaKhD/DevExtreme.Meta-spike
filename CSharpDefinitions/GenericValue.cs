@@ -6,8 +6,21 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions {
 
-    internal interface IGenericValue { }
+    internal interface IGenericValue {
+        object Value { get; }
+    }
 
-    internal abstract class GenericValue<T1, T2> : IGenericValue { }
+    internal class GenericValue<T1, T2> : IGenericValue {
+
+        public object Value { get; private set; }
+
+        public GenericValue(T1 value) {
+            Value = value;
+        }
+
+        public GenericValue(T2 value) {
+            Value = value;
+        }
+    }
 
 }

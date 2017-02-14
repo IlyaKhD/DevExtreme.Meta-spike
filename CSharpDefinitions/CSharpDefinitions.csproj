@@ -41,14 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassMeta.cs" />
-    <Compile Include="ClassMetaAttribute.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GenericValue.cs" />
     <Compile Include="LowerCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PropertyMeta.cs" />
-    <Compile Include="PropertyMetaAttribute.cs" />
+    <Compile Include="PropertyValueAttribute.cs" />
     <Compile Include="Samples\GenericProp.cs" />
     <Compile Include="Samples\PropertyMap.cs" />
   </ItemGroup>

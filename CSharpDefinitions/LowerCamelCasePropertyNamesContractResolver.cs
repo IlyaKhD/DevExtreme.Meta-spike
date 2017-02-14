@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using CSharpDefinitions.Extensions;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,7 @@ namespace CSharpDefinitions {
 
     internal class LowerCamelCasePropertyNamesContractResolver : DefaultContractResolver {
 
-        protected override string ResolvePropertyName(string propertyName) {
-            var actualPropertyName = propertyName.Length > 1
-                ? propertyName.Substring(0, 1).ToLower() + propertyName.Substring(1)
-                : propertyName;
-
-            return base.ResolvePropertyName(actualPropertyName);
-        }
+        protected override string ResolvePropertyName(string propertyName) => base.ResolvePropertyName(propertyName.ToLowerCamelCase());
     }
 
 }

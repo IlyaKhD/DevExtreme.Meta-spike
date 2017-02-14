@@ -12,11 +12,9 @@ namespace CSharpDefinitions.Samples {
             new[] { typeof(ClassA) }
         );
 
-        [ClassMeta("classA")]
         class ClassA {
 
-            [PropertyMeta("prop1", defaultValue: "abc")]
-            public GenericValue<int, string> Prop1 => null;
+            public GenericValue<int, string> Prop1 => new GenericValue<int, string>("abc");
         }
     }
 
