@@ -54,7 +54,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="CSharpDefinitionsTests.cs" />
+    <Compile Include="GenericPropTests.cs" />
+    <Compile Include="PropertyMapTests.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\CSharpDefinitions\CSharpDefinitions.csproj">
       <Project>{27535361-0e80-4595-8c6d-af22bc229b62}</Project>
       <Name>CSharpDefinitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JSDoc\JSDoc.csproj">
+      <Project>{d3f6509b-c18c-408d-8058-c6d602b01332}</Project>
+      <Name>JSDoc</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

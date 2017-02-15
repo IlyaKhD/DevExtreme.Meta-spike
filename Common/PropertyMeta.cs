@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions {
+namespace Common {
 
-    internal struct PropertyMeta {
+    public struct PropertyMeta {
         public readonly string Name;
         public readonly string[] Types;
         public readonly object Default;

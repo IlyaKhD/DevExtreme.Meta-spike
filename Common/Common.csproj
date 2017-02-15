@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{27535361-0E80-4595-8C6D-AF22BC229B62}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{636CB942-275D-45B7-8468-28AE8CA35942}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpDefinitions</RootNamespace>
-    <AssemblyName>CSharpDefinitions</AssemblyName>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\</OutputPath>
@@ -38,28 +35,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="GenericValue.cs" />
-    <Compile Include="Processor.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="PropertyValueAttribute.cs" />
-    <Compile Include="Samples\GenericProp.cs" />
-    <Compile Include="Samples\PropertyMap.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{636cb942-275d-45b7-8468-28ae8ca35942}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
+    <Compile Include="ClassMeta.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="LowerCamelCasePropertyNamesContractResolver.cs" />
+    <Compile Include="PropertyMeta.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

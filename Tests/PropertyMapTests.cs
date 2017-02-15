@@ -1,16 +1,16 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Tests {
 
-    [TestFixture]
-    public class CSharpDefinitionsTests {
-
-        [Test]
-        public void ProvidesPropertyMap() {
-            #region expected
-            var expected =
-            @"
+    public class PropertyMapTests {
+        #region expected
+        const string EXPECTED =
+        @"
                 [
                     {
                         ""name"": ""classA"",
@@ -62,36 +62,14 @@ namespace Tests {
                     }
                 ]
             ";
-            #endregion
+        #endregion
+
+        [Test]
+        public void PropertyMap_CSHarpDefinitions() {
 
             var sample = new CSharpDefinitions.Samples.PropertyMap();
 
-            Assert.AreEqual(Utils.NormalizeJson(expected), Utils.NormalizeJson(sample.GetMeta()));
-        }
-
-        [Test]
-        public void ProvidesGenericProp() {
-            #region expected
-            var expected = @"
-                [
-                    {
-                        ""name"": ""classA"",
-                        ""props"": 
-                        [
-                            {
-                                ""name"": ""prop1"",
-                                ""types"": [ ""number"", ""string"" ],
-                                ""default"": ""abc""
-                            }
-                        ]
-                    }
-                ]
-            ";
-            #endregion
-
-            var sample = new CSharpDefinitions.Samples.GenericProp();
-
-            Assert.AreEqual(Utils.NormalizeJson(expected), Utils.NormalizeJson(sample.GetMeta()));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
         }
     }
 
