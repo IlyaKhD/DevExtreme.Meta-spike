@@ -10,8 +10,8 @@ namespace JSDoc {
 
     class JSDocCommand {
 
-        public CommandResult Run(string arguments) {
-            var workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        public CommandResult Run(string relFileName) {
+            var workDir = AppDomain.CurrentDomain.BaseDirectory;
 
             var process = new Process();
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -19,11 +19,21 @@ namespace JSDoc {
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.FileName = Path.Combine(workingDirectory, "RunJSDoc.bat");
-            process.StartInfo.WorkingDirectory = workingDirectory;
-            process.StartInfo.Arguments = arguments;
+            process.StartInfo.FileName = Path.Combine(workDir, "RunJSDoc.bat");
+            process.StartInfo.WorkingDirectory = workDir;
+            process.StartInfo.Arguments = relFileName;
+
+            if(!File.Exists(process.StartInfo.FileName))
+                throw new Exception($"File not found: '{process.StartInfo.FileName}'");
+
+            if(!File.Exists(Path.Combine(workDir, relFileName)))
+                throw new Exception($"File not found: '{Path.Combine(workDir, relFileName)}'");
+
             process.Start();
-            process.WaitForExit();
+            if(!process.WaitForExit(milliseconds: 1000)) {
+                process.Kill();
+                throw new Exception($"JSDoc process exited due to timeout: '{process.StandardOutput.ReadToEnd()}'");
+            }
 
             process.StandardOutput.ReadLine();
             process.StandardOutput.ReadLine();
