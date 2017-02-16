@@ -10,8 +10,13 @@ namespace JSDoc {
 
     class JSDocCommand {
 
-        public CommandResult Run(string relFileName) {
+        public CommandResult Run(IEnumerable<string> relFileNames) {
             var workDir = AppDomain.CurrentDomain.BaseDirectory;
+
+            foreach(var fileName in relFileNames) {
+                if(!File.Exists(Path.Combine(workDir, fileName)))
+                    throw new Exception($"File not found: '{Path.Combine(workDir, fileName)}'");
+            }
 
             var process = new Process();
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -19,24 +24,15 @@ namespace JSDoc {
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.FileName = Path.Combine(workDir, "RunJSDoc.bat");
+            process.StartInfo.FileName = "cmd";
             process.StartInfo.WorkingDirectory = workDir;
-            process.StartInfo.Arguments = relFileName;
-
-            if(!File.Exists(process.StartInfo.FileName))
-                throw new Exception($"File not found: '{process.StartInfo.FileName}'");
-
-            if(!File.Exists(Path.Combine(workDir, relFileName)))
-                throw new Exception($"File not found: '{Path.Combine(workDir, relFileName)}'");
+            process.StartInfo.Arguments = "/C jsdoc -X " + String.Join(" ", relFileNames);
 
             process.Start();
             if(!process.WaitForExit(milliseconds: 1000)) {
                 process.Kill();
-                throw new Exception($"JSDoc process exited due to timeout: '{process.StandardOutput.ReadToEnd()}'");
+                return new CommandResult(process.StandardOutput.ReadToEnd(), process.ExitCode, process.StandardError.ReadToEnd());
             }
-
-            process.StandardOutput.ReadLine();
-            process.StandardOutput.ReadLine();
 
             return new CommandResult(process.StandardOutput.ReadToEnd(), process.ExitCode, process.StandardError.ReadToEnd());
         }

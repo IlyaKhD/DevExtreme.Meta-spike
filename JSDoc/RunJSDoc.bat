@@ -1,1 +1,1 @@
-jsdoc -X %1
+jsdoc -X %*

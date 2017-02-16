@@ -71,6 +71,14 @@ namespace Tests {
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
         }
+
+        [Test]
+        public void PropertyMap_JSDoc() {
+
+            var sample = new JSDoc.Samples.PropertyMap();
+
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
+        }
     }
 
 }

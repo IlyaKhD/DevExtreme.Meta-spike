@@ -10,8 +10,8 @@ namespace JSDoc.Samples {
 
     public abstract class SampleBase {
 
-        protected string GetMeta(string fileName) {
-            var jsdoc = new JSDocCommand().Run($"samples/{fileName}");
+        protected string GetMeta(params string[] fileNames) {
+            var jsdoc = new JSDocCommand().Run(fileNames.Select(f => $"samples/{f}"));
             var result = new JSDocHelper().ParseOutput(jsdoc.Output);
 
             return JsonConvert.SerializeObject(

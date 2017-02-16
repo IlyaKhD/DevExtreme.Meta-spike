@@ -11,40 +11,64 @@ namespace JSDoc {
     internal class JSDocHelper {
 
         public IEnumerable<ClassMeta> ParseOutput(string json) {
-            var output = JsonConvert.DeserializeAnonymousType(
-                json,
-                new[] {
-                    new {
-                        // common
-                        Kind = "",
-                        Name = "",
-                        // props
-                        Memberof = "",
-                        Defaultvalue = "",
-                        Type = new {
-                            names = new[] { "" }
-                        }
-                    }
-                }
-            );
+            var output = JsonConvert.DeserializeObject<JSDocEntry[]>(json);
+
+            var mixinProps = output
+                .Where(e => e.Kind == "mixin")
+                .ToArray()
+                .SelectMany(m => output.Where(e => e.Memberof == m.Name))
+                .ToDictionary(
+                    p => p.Longname,
+                    p => GetPropMeta(p)
+                );
 
             var props = new Dictionary<string, ICollection<PropertyMeta>>();
             foreach(var propDoc in output.Where(e => e.Kind == "member")) {
                 if(!props.ContainsKey(propDoc.Memberof))
                     props[propDoc.Memberof] = new List<PropertyMeta>();
 
-                props[propDoc.Memberof].Add(new PropertyMeta(propDoc.Name, propDoc.Defaultvalue, propDoc.Type.names.Select(GetTypeName)));
+                props[propDoc.Memberof].Add(GetPropMeta(propDoc));
             }
 
-            var result = output
+            return output
                 .Where(e => e.Kind == "class")
                 .Select(c =>
                     new ClassMeta(
                         c.Name,
-                        props.ContainsKey(c.Name) ? props[c.Name] : Enumerable.Empty<PropertyMeta>()
+                        (props.ContainsKey(c.Name) ? props[c.Name] : Enumerable.Empty<PropertyMeta>())
+                            .OrderBy(p => p.Name)
+                            .Concat(
+                                (c.Mixes?.Where(m => mixinProps.ContainsKey(m))?.Select(m => mixinProps[m]) ?? Enumerable.Empty<PropertyMeta>())
+                                .OrderBy(p => p.Name)
+                            )
                     )
                 );
-            return result;
+        }
+
+        static PropertyMeta GetPropMeta(JSDocEntry propDoc) {
+            var types = propDoc.Type.Names.Select(GetTypeName);
+
+            if(String.IsNullOrEmpty(propDoc.Defaultvalue))
+                return new PropertyMeta(propDoc.Name, propDoc.Defaultvalue, types);
+
+#warning must die
+            if(types.Contains("string"))
+                return new PropertyMeta(propDoc.Name, propDoc.Defaultvalue, types);
+
+            object defaultValue = null;
+            switch(types.First()) {
+                case "number":
+                    int value;
+                    Int32.TryParse(propDoc.Defaultvalue, out value);
+                    defaultValue = value;
+                    break;
+
+                default:
+                    defaultValue = propDoc.Defaultvalue;
+                    break;
+            }
+
+            return new PropertyMeta(propDoc.Name, defaultValue, types);
         }
 
         static string GetTypeName(string type) {
@@ -55,6 +79,48 @@ namespace JSDoc {
                 return "string";
 
             throw new Exception($"Unknown type: '{type}'");
+        }
+
+
+
+        struct JSDocEntry {
+            public readonly string Kind;
+            public readonly string Name;
+            // class attrs
+            public readonly string[] Mixes;
+            // prop attrs
+            public readonly string Longname;
+            public readonly string Memberof;
+            public readonly string Defaultvalue;
+            public readonly JSDocType Type;
+
+            [JsonConstructor]
+            public JSDocEntry(
+                string kind,
+                string name,
+                string[] mixes,
+                string longname,
+                string memberof,
+                string defaultvalue,
+                JSDocType type
+            ) {
+                Kind = kind;
+                Name = name;
+                Mixes = mixes;
+                Longname = longname;
+                Memberof = memberof;
+                Defaultvalue = defaultvalue;
+                Type = type;
+            }
+
+            public struct JSDocType {
+                public string[] Names;
+
+                [JsonConstructor]
+                public JSDocType(string[] name) {
+                    Names = name;
+                }
+            }
         }
     }
 

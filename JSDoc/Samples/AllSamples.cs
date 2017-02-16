@@ -10,4 +10,8 @@ namespace JSDoc.Samples {
 
         public string GetMeta() => GetMeta("GenericProp.js");
     }
+
+    public class PropertyMap : SampleBase {
+        public string GetMeta() => GetMeta("PropertyMap.js", "PropertyMap-A.js", "PropertyMap-B.js", "PropertyMap-C.js");
+    }
 }
