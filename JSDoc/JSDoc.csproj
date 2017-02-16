@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JSDocCommand.cs" />
+    <Compile Include="JSDocHelper.cs" />
     <Compile Include="Samples\GenericProp.cs" />
   </ItemGroup>
   <ItemGroup>
