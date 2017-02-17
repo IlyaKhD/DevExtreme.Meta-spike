@@ -39,9 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JSDocCommand.cs" />
-    <Compile Include="JSDocHelper.cs" />
-    <Compile Include="Samples\AllSamples.cs" />
-    <Compile Include="Samples\SampleBase.cs" />
+    <Compile Include="Processor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Samples\PropertyMap-B.js">
@@ -65,9 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="RunJSDoc.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

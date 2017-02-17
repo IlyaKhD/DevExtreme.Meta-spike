@@ -4,63 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpDefinitions.Samples {
+namespace CSharpDefinitions.Samples.PropertyMap {
 
-    public class PropertyMap {
+    public class ClassA : Prop1, Prop3 {
 
-        public string GetMeta() => new Processor().GetMeta(
-            new[] {
-                typeof(ClassA),
-                typeof(ClassB),
-                typeof(ClassC)
-            }
-        );
+        public int Prop1 => Any.INT;
+        public string Prop3 => Any.STRING;
+    }
 
-        class ClassA : Prop1, Prop3 {
+    public class ClassB : Prop1, Prop2 {
 
-            public int Prop1 => Any.INT;
-            public string Prop3 => Any.STRING;
-        }
+        public int Prop1 => Any.INT;
+        public string Prop2 => Any.STRING;
+    }
 
-        class ClassB : Prop1, Prop2 {
+    public class ClassC : Prop2 {
 
-            public int Prop1 => Any.INT;
-            public string Prop2 => Any.STRING;
-        }
+        public string Prop4 => "xyz";
+        public string Prop2 => Any.STRING;
+    }
 
-        class ClassC : Prop2 {
+    #region CommonProps definitions
 
-            public string Prop4 => "xyz";
-            public string Prop2 => Any.STRING;
-        }
+    interface Prop1 {
 
-        #region CommonProps definitions
+        [PropertyValue(123)]
+        int Prop1 { get; }
+    }
 
-        interface Prop1 {
+    interface Prop2 {
 
-            [PropertyValue(123)]
-            int Prop1 { get; }
-        }
+        [PropertyValue("abc")]
+        string Prop2 { get; }
+    }
 
-        interface Prop2 {
+    interface Prop3 {
 
-            [PropertyValue("abc")]
-            string Prop2 { get; }
-        }
+        [PropertyValue("def")]
+        string Prop3 { get; }
+    }
 
-        interface Prop3 {
+    #endregion
 
-            [PropertyValue("def")]
-            string Prop3 { get; }
-        }
-
-        #endregion
-
-        static class Any {
-            public const int INT = Int32.MaxValue;
-            public const string STRING = "";
-        }
-
+    static class Any {
+        public const int INT = Int32.MaxValue;
+        public const string STRING = "";
     }
 
 }

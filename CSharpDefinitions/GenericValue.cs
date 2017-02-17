@@ -10,7 +10,7 @@ namespace CSharpDefinitions {
         object Value { get; }
     }
 
-    internal class GenericValue<T1, T2> : IGenericValue {
+    public class GenericValue<T1, T2> : IGenericValue {
 
         public object Value { get; private set; }
 

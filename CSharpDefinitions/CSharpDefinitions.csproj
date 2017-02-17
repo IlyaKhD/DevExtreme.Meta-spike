@@ -40,7 +40,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="GenericValue.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />

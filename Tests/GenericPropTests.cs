@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CSharpSample = CSharpDefinitions.Samples.GenericProp;
+
 namespace Tests {
 
     public class GenericPropTests {
@@ -29,16 +31,18 @@ namespace Tests {
 
         [Test]
         public void GenericProp_CSHarpDefinitions() {
-            var sample = new CSharpDefinitions.Samples.GenericProp();
+            var processor = new CSharpDefinitions.Processor();
+            var actual = processor.GetMeta(new[] { typeof(CSharpSample.ClassA) });
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
 
         [Test]
         public void GenericProp_JSDoc() {
-            var sample = new JSDoc.Samples.GenericProp();
+            var processor = new JSDoc.Processor();
+            var actual = processor.GetMeta("GenericProp.js");
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
     }
 

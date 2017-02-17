@@ -8,9 +8,19 @@ using System.Threading.Tasks;
 
 namespace JSDoc {
 
-    internal class JSDocHelper {
+    public class Processor {
 
-        public IEnumerable<ClassMeta> ParseOutput(string json) {
+        public string GetMeta(params string[] fileNames) {
+            var jsdoc = new JSDocCommand().Run(fileNames.Select(f => $"samples/{f}"));
+            var result = ParseOutput(jsdoc.Output);
+
+            return JsonConvert.SerializeObject(
+                result,
+                new JsonSerializerSettings { ContractResolver = new LowerCamelCasePropertyNamesContractResolver() }
+            );
+        }
+
+        static IEnumerable<ClassMeta> ParseOutput(string json) {
             var output = JsonConvert.DeserializeObject<JSDocEntry[]>(json);
 
             var mixinProps = output
@@ -80,8 +90,6 @@ namespace JSDoc {
 
             throw new Exception($"Unknown type: '{type}'");
         }
-
-
 
         struct JSDocEntry {
             public readonly string Kind;

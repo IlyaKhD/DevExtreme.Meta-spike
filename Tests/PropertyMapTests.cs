@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CSharpSample = CSharpDefinitions.Samples.PropertyMap;
+
 namespace Tests {
 
     public class PropertyMapTests {
@@ -66,18 +68,18 @@ namespace Tests {
 
         [Test]
         public void PropertyMap_CSHarpDefinitions() {
+            var processor = new CSharpDefinitions.Processor();
+            var actual = processor.GetMeta(new[] { typeof(CSharpSample.ClassA), typeof(CSharpSample.ClassB), typeof(CSharpSample.ClassC) });
 
-            var sample = new CSharpDefinitions.Samples.PropertyMap();
-
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
 
         [Test]
         public void PropertyMap_JSDoc() {
+            var processor = new JSDoc.Processor();
+            var actual = processor.GetMeta("PropertyMap.js", "PropertyMap-A.js", "PropertyMap-B.js", "PropertyMap-C.js");
 
-            var sample = new JSDoc.Samples.PropertyMap();
-
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(sample.GetMeta()));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
     }
 

@@ -1,6 +1,5 @@
 ﻿using Common;
 using Common.Extensions;
-using CSharpDefinitions.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,10 +11,6 @@ using System.Threading.Tasks;
 namespace CSharpDefinitions {
 
     public class Processor {
-        public const int NOVAL_INT = Int32.MaxValue;
-        public const string NOVAL_STRING = "29ba8527a456401dafa26a108c6731a3";
-
-        const BindingFlags PROPS_BINDING = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance;
 
         public string GetMeta(IEnumerable<Type> types) {
             var result = types.Select(t => new ClassMeta(t.Name.ToLowerCamelCase(), GetClassProps(t)));
@@ -30,10 +25,10 @@ namespace CSharpDefinitions {
             var instance = Activator.CreateInstance(type);
 
             var interfaceProps = type.GetInterfaces()
-                .SelectMany(i => i.GetProperties(PROPS_BINDING))
+                .SelectMany(i => i.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance))
                 .Select(p => CreatePropMeta(p, p.GetCustomAttribute<PropertyValueAttribute>()?.Value));
 
-            var ownProps = type.GetProperties(PROPS_BINDING)
+            var ownProps = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
                 .Select(p => CreatePropMeta(p, p.GetValue(instance)))
                 .Except(interfaceProps, PropertyMeta.Comparer);
 
