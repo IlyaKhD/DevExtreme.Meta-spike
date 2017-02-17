@@ -18,18 +18,22 @@ namespace JSDoc {
                     throw new Exception($"File not found: '{Path.Combine(workDir, fileName)}'");
             }
 
+            var executablePath = Path.Combine(workDir, "../node_modules/.bin/jsdoc.cmd");
+            if(!File.Exists(executablePath))
+                throw new Exception($"Unable to find JSDoc executable: '{executablePath}'. Try running 'npm install'");
+
             var process = new Process();
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.FileName = "cmd";
+            process.StartInfo.FileName = executablePath;
             process.StartInfo.WorkingDirectory = workDir;
-            process.StartInfo.Arguments = "/C jsdoc -X " + String.Join(" ", relFileNames);
+            process.StartInfo.Arguments = "-X " + String.Join(" ", relFileNames);
 
             process.Start();
-            if(!process.WaitForExit(milliseconds: 1000)) {
+            if(!process.WaitForExit(milliseconds: 2000)) {
                 process.Kill();
                 return new CommandResult(process.StandardOutput.ReadToEnd(), process.ExitCode, process.StandardError.ReadToEnd());
             }
