@@ -34,6 +34,9 @@ namespace JSDoc {
 
             var props = new Dictionary<string, ICollection<PropertyMeta>>();
             foreach(var propDoc in output.Where(e => e.Kind == "member")) {
+                if(String.IsNullOrEmpty(propDoc.Memberof))
+                    continue;
+
                 if(!props.ContainsKey(propDoc.Memberof))
                     props[propDoc.Memberof] = new List<PropertyMeta>();
 
@@ -56,7 +59,7 @@ namespace JSDoc {
         }
 
         static PropertyMeta GetPropMeta(JSDocEntry propDoc) {
-            var types = propDoc.Type.Names.Select(GetTypeName);
+            var types = propDoc.Type.Names?.Select(GetTypeName);
 
             if(String.IsNullOrEmpty(propDoc.Defaultvalue))
                 return new PropertyMeta(propDoc.Name, propDoc.Defaultvalue, types);
