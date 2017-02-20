@@ -15,50 +15,60 @@ namespace Tests {
         @"
                 [
                     {
-                        ""name"": ""classA"",
+                        ""name"": ""candleStickSeries"",
                         ""props"":
                         [
                             {
-                                ""name"": ""prop1"",
-                                ""types"": [ ""number"" ],
-                                ""default"": 123
+                                ""name"": ""innerColor"",
+                                ""types"": [ ""string"" ],
+                                ""default"": ""#ffffff""
                             },
                             {
-                                ""name"": ""prop3"",
+                                ""name"": ""openValueField"",
                                 ""types"": [ ""string"" ],
-                                ""default"": ""def""
+                                ""default"": ""open""
+                            },
+                            {
+                                ""name"": ""reduction"",
+                                ""types"": [ ""object"" ],
+                                ""default"": null
                             }
                         ]
                     },
                     {
-                        ""name"": ""classB"",
+                        ""name"": ""stockSeries"",
                         ""props"":
                         [
                             {
-                                ""name"": ""prop1"",
-                                ""types"": [ ""number"" ],
-                                ""default"": 123
+                                ""name"": ""hoverMode"",
+                                ""types"": [ ""string"" ],
+                                ""default"": ""onlyPoint""
                             },
                             {
-                                ""name"": ""prop2"",
+                                ""name"": ""openValueField"",
                                 ""types"": [ ""string"" ],
-                                ""default"": ""abc""
+                                ""default"": ""open""
+                            },
+                            {
+                                ""name"": ""reduction"",
+                                ""types"": [ ""object"" ],
+                                ""default"": null
                             }
                         ]
                     },
                     {
-                        ""name"": ""classC"",
+                        ""name"": ""barSeries"",
                         ""props"":
                         [
                             {
-                                ""name"": ""prop4"",
-                                ""types"": [ ""string"" ],
-                                ""default"": ""xyz""
+                                ""name"": ""cornerRadius"",
+                                ""types"": [ ""number"" ],
+                                ""default"": 0
                             },
                             {
-                                ""name"": ""prop2"",
-                                ""types"": [ ""string"" ],
-                                ""default"": ""abc""
+                                ""name"": ""minBarSize"",
+                                ""types"": [ ""number"" ],
+                                ""default"": 0
                             }
                         ]
                     }
@@ -69,7 +79,7 @@ namespace Tests {
         [Test]
         public void PropertyMap_CSHarpDefinitions() {
             var processor = new CSharpDefinitions.Processor();
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.ClassA), typeof(CSharpSample.ClassB), typeof(CSharpSample.ClassC) });
+            var actual = processor.GetMeta(new[] { typeof(CSharpSample.CandleStickSeries), typeof(CSharpSample.StockSeries), typeof(CSharpSample.BarSeries) });
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
@@ -77,7 +87,7 @@ namespace Tests {
         [Test]
         public void PropertyMap_JSDoc() {
             var processor = new JSDoc.Processor();
-            var actual = processor.GetMeta("PropertyMap.js", "PropertyMap-A.js", "PropertyMap-B.js", "PropertyMap-C.js");
+            var actual = processor.GetMeta("CommonSeries.js", "CandleStickSeries.js", "StockSeries.js", "BarSeries.js");
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }

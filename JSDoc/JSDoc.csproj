@@ -42,16 +42,16 @@
     <Compile Include="Processor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Samples\PropertyMap-B.js">
+    <Content Include="Samples\BarSeries.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\PropertyMap.js">
+    <Content Include="Samples\CommonSeries.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\PropertyMap-C.js">
+    <Content Include="Samples\StockSeries.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\PropertyMap-A.js">
+    <Content Include="Samples\CandleStickSeries.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Samples\GenericProp.js">

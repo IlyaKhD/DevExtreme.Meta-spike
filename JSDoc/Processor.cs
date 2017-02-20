@@ -37,6 +37,9 @@ namespace JSDoc {
                 if(String.IsNullOrEmpty(propDoc.Memberof))
                     continue;
 
+                if(propDoc.Mixed) // ignore resolved mixins
+                    continue;
+
                 if(!props.ContainsKey(propDoc.Memberof))
                     props[propDoc.Memberof] = new List<PropertyMeta>();
 
@@ -91,12 +94,16 @@ namespace JSDoc {
             if(type.Equals("string", StringComparison.OrdinalIgnoreCase))
                 return "string";
 
+            if(type.Equals("object", StringComparison.OrdinalIgnoreCase))
+                return "object";
+
             throw new Exception($"Unknown type: '{type}'");
         }
 
         struct JSDocEntry {
             public readonly string Kind;
             public readonly string Name;
+            public readonly bool Mixed;
             // class attrs
             public readonly string[] Mixes;
             // prop attrs
@@ -113,6 +120,7 @@ namespace JSDoc {
                 string longname,
                 string memberof,
                 string defaultvalue,
+                bool mixed,
                 JSDocType type
             ) {
                 Kind = kind;
@@ -122,6 +130,7 @@ namespace JSDoc {
                 Memberof = memberof;
                 Defaultvalue = defaultvalue;
                 Type = type;
+                Mixed = mixed;
             }
 
             public struct JSDocType {

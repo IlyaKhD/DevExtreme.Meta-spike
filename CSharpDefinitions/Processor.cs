@@ -65,6 +65,9 @@ namespace CSharpDefinitions {
             if(type == typeof(int))
                 return "number";
 
+            if(type == typeof(object))
+                return "object";
+
             throw new Exception($"Unknown type: '{type.FullName}'");
         }
     }

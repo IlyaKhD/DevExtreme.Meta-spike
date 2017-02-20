@@ -6,42 +6,55 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.PropertyMap {
 
-    public class ClassA : Prop1, Prop3 {
+    public class CandleStickSeries : InnerColor, OpenValueField, Reduction {
 
-        public int Prop1 => Any.INT;
-        public string Prop3 => Any.STRING;
+        public string InnerColor => Any.STRING;
+        public string OpenValueField => Any.STRING;
+        public object Reduction => Any.STRING;
     }
 
-    public class ClassB : Prop1, Prop2 {
+    public class BarSeries : CornerRadius, MinBarSize {
 
-        public int Prop1 => Any.INT;
-        public string Prop2 => Any.STRING;
+        public int CornerRadius => Any.INT;
+        public int MinBarSize => Any.INT;
     }
 
-    public class ClassC : Prop2 {
+    public class StockSeries : OpenValueField, Reduction {
 
-        public string Prop4 => "xyz";
-        public string Prop2 => Any.STRING;
+        public string HoverMode => "onlyPoint";
+        public string OpenValueField => Any.STRING;
+        public object Reduction => Any.STRING;
     }
 
     #region CommonProps definitions
 
-    interface Prop1 {
+    interface OpenValueField {
 
-        [PropertyValue(123)]
-        int Prop1 { get; }
+        [PropertyValue("open")]
+        string OpenValueField { get; }
     }
 
-    interface Prop2 {
+    interface CornerRadius {
 
-        [PropertyValue("abc")]
-        string Prop2 { get; }
+        [PropertyValue(0)]
+        int CornerRadius { get; }
     }
 
-    interface Prop3 {
+    interface MinBarSize {
 
-        [PropertyValue("def")]
-        string Prop3 { get; }
+        [PropertyValue(0)]
+        int MinBarSize { get; }
+    }
+
+    interface Reduction {
+
+        object Reduction { get; }
+    }
+
+    interface InnerColor {
+
+        [PropertyValue("#ffffff")]
+        string InnerColor { get; }
     }
 
     #endregion
