@@ -28,7 +28,7 @@ namespace JSDoc {
                 .ToArray()
                 .SelectMany(m => output.Where(e => e.Memberof == m.Name))
                 .ToDictionary(
-                    p => p.Longname,
+                    p => p.LongName,
                     p => GetPropMeta(p)
                 );
 
@@ -50,8 +50,8 @@ namespace JSDoc {
                 .Where(e => e.Kind == "class")
                 .Select(c =>
                     new ClassMeta(
-                        c.Name,
-                        (props.ContainsKey(c.Name) ? props[c.Name] : Enumerable.Empty<PropertyMeta>())
+                        c.LongName,
+                        (props.ContainsKey(c.LongName) ? props[c.LongName] : Enumerable.Empty<PropertyMeta>())
                             .OrderBy(p => p.Name)
                             .Concat(
                                 (c.Mixes?.Where(m => mixinProps.ContainsKey(m))?.Select(m => mixinProps[m]) ?? Enumerable.Empty<PropertyMeta>())
@@ -87,13 +87,7 @@ namespace JSDoc {
             if(type.Equals("int", StringComparison.OrdinalIgnoreCase))
                 return "number";
 
-            if(type.Equals("string", StringComparison.OrdinalIgnoreCase))
-                return "string";
-
-            if(type.Equals("object", StringComparison.OrdinalIgnoreCase))
-                return "object";
-
-            throw new Exception($"Unknown type: '{type}'");
+            return type;
         }
 
         struct JSDocEntry {
@@ -103,7 +97,7 @@ namespace JSDoc {
             // class attrs
             public readonly string[] Mixes;
             // prop attrs
-            public readonly string Longname;
+            public readonly string LongName;
             public readonly string Memberof;
             public readonly string Defaultvalue;
             public readonly JSDocType Type;
@@ -122,7 +116,7 @@ namespace JSDoc {
                 Kind = kind;
                 Name = name;
                 Mixes = mixes;
-                Longname = longname;
+                LongName = longname;
                 Memberof = memberof;
                 Defaultvalue = defaultvalue;
                 Type = type;

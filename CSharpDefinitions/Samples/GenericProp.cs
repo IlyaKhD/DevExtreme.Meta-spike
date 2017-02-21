@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.GenericProp {
 
-    public class Font {
+    public class font {
 
         public GenericValue<int, string> Size => new GenericValue<int, string>(14);
     }

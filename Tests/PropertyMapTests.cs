@@ -78,8 +78,8 @@ namespace Tests {
 
         [Test]
         public void PropertyMap_CSHarpDefinitions() {
-            var processor = new CSharpDefinitions.Processor();
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.CandleStickSeries), typeof(CSharpSample.StockSeries), typeof(CSharpSample.BarSeries) });
+            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.stockSeries).Namespace);
+            var actual = processor.GetMeta(new[] { typeof(CSharpSample.candleStickSeries), typeof(CSharpSample.stockSeries), typeof(CSharpSample.barSeries) });
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }

@@ -46,6 +46,7 @@
     <Compile Include="PropertyValueAttribute.cs" />
     <Compile Include="Samples\GenericProp.cs" />
     <Compile Include="Samples\PropertyMap.cs" />
+    <Compile Include="Samples\ReusableClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

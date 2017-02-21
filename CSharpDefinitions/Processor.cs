@@ -12,8 +12,14 @@ namespace CSharpDefinitions {
 
     public class Processor {
 
+        readonly string _rootNamespace;
+
+        public Processor(string rootNamespace) {
+            _rootNamespace = rootNamespace;
+        }
+
         public string GetMeta(IEnumerable<Type> types) {
-            var result = types.Select(t => new ClassMeta(t.Name.ToLowerCamelCase(), GetClassProps(t)));
+            var result = types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t)));
 
             return JsonConvert.SerializeObject(
                 result,
@@ -21,7 +27,7 @@ namespace CSharpDefinitions {
             );
         }
 
-        static IEnumerable<PropertyMeta> GetClassProps(Type type) {
+        IEnumerable<PropertyMeta> GetClassProps(Type type) {
             var instance = Activator.CreateInstance(type);
 
             var interfaceProps = type.GetInterfaces()
@@ -35,7 +41,7 @@ namespace CSharpDefinitions {
             return ownProps.Concat(interfaceProps);
         }
 
-        static PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {
+        PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {
             var defaultValue = propValue is IGenericValue ? ((IGenericValue)propValue).Value : propValue;
 
             return new PropertyMeta(
@@ -45,7 +51,7 @@ namespace CSharpDefinitions {
             );
         }
 
-        static IEnumerable<string> GetPropTypes(PropertyInfo prop) {
+        IEnumerable<string> GetPropTypes(PropertyInfo prop) {
             var propType = prop.PropertyType;
 
             if(!typeof(IGenericValue).IsAssignableFrom(propType)) {
@@ -57,7 +63,7 @@ namespace CSharpDefinitions {
                 yield return GetTypeName(type);
         }
 
-        static string GetTypeName(Type type) {
+        string GetTypeName(Type type) {
 
             if(type == typeof(string))
                 return "string";
@@ -68,7 +74,10 @@ namespace CSharpDefinitions {
             if(type == typeof(object))
                 return "object";
 
-            throw new Exception($"Unknown type: '{type.FullName}'");
+            if(type.FullName.StartsWith(_rootNamespace + "."))
+                return type.FullName.Substring(_rootNamespace.Length + 1);
+
+            return type.FullName;
         }
     }
 

@@ -54,6 +54,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ReusableClassTests.cs" />
     <Compile Include="GenericPropTests.cs" />
     <Compile Include="PropertyMapTests.cs" />
     <Compile Include="Utils.cs" />

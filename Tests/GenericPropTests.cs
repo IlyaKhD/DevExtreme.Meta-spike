@@ -31,8 +31,8 @@ namespace Tests {
 
         [Test]
         public void GenericProp_CSHarpDefinitions() {
-            var processor = new CSharpDefinitions.Processor();
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.Font) });
+            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.font).Namespace);
+            var actual = processor.GetMeta(new[] { typeof(CSharpSample.font) });
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }

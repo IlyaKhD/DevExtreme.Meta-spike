@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.PropertyMap {
 
-    public class CandleStickSeries : InnerColor, OpenValueField, Reduction {
+    public class candleStickSeries : InnerColor, OpenValueField, Reduction {
 
         public string InnerColor => Any.STRING;
         public string OpenValueField => Any.STRING;
         public object Reduction => Any.STRING;
     }
 
-    public class BarSeries : CornerRadius, MinBarSize {
+    public class barSeries : CornerRadius, MinBarSize {
 
         public int CornerRadius => Any.INT;
         public int MinBarSize => Any.INT;
     }
 
-    public class StockSeries : OpenValueField, Reduction {
+    public class stockSeries : OpenValueField, Reduction {
 
         public string HoverMode => "onlyPoint";
         public string OpenValueField => Any.STRING;
