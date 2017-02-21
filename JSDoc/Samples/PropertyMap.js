@@ -1,4 +1,44 @@
-﻿/**
+﻿module.exports = function () {
+    /**
+     * @class candleStickSeries
+     * @mixes commonProps.innerColor
+     * @mixes commonProps.reduction
+     * @mixes commonProps.openValueField
+     */
+    return {
+    };
+};
+
+module.exports = function () {
+    /**
+     * @class stockSeries
+     * @mixes commonProps.reduction
+     * @mixes commonProps.openValueField
+     */
+    return {
+
+        /**
+         * @property
+         * @memberof stockSeries
+         * @type {string}
+         * @default onlyPoint
+         */
+
+        hoverMode: "onlyPoint"
+    };
+};
+
+module.exports = function () {
+    /**
+     * @class barSeries
+     * @mixes commonProps.cornerRadius
+     * @mixes commonProps.minBarSize
+     */
+    return {
+    };
+};
+
+/**
  * @name commonProps
  * @mixin
  */

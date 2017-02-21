@@ -42,16 +42,7 @@
     <Compile Include="Processor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Samples\BarSeries.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\CommonSeries.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\StockSeries.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\CandleStickSeries.js">
+    <Content Include="Samples\PropertyMap.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Samples\GenericProp.js">

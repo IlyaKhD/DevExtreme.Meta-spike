@@ -87,7 +87,7 @@ namespace Tests {
         [Test]
         public void PropertyMap_JSDoc() {
             var processor = new JSDoc.Processor();
-            var actual = processor.GetMeta("CommonSeries.js", "CandleStickSeries.js", "StockSeries.js", "BarSeries.js");
+            var actual = processor.GetMeta("PropertyMap.js");
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
