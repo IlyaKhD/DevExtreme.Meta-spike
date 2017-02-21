@@ -15,13 +15,13 @@ namespace Tests {
         const string EXPECTED = @"
                 [
                     {
-                        ""name"": ""classA"",
+                        ""name"": ""font"",
                         ""props"": 
                         [
                             {
-                                ""name"": ""prop1"",
+                                ""name"": ""size"",
                                 ""types"": [ ""number"", ""string"" ],
-                                ""default"": ""abc""
+                                ""default"": 14
                             }
                         ]
                     }
@@ -32,7 +32,7 @@ namespace Tests {
         [Test]
         public void GenericProp_CSHarpDefinitions() {
             var processor = new CSharpDefinitions.Processor();
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.ClassA) });
+            var actual = processor.GetMeta(new[] { typeof(CSharpSample.Font) });
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }

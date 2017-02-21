@@ -67,10 +67,6 @@ namespace JSDoc {
             if(String.IsNullOrEmpty(propDoc.Defaultvalue))
                 return new PropertyMeta(propDoc.Name, propDoc.Defaultvalue, types);
 
-#warning must die
-            if(types.Contains("string"))
-                return new PropertyMeta(propDoc.Name, propDoc.Defaultvalue, types);
-
             object defaultValue = null;
             switch(types.First()) {
                 case "number":

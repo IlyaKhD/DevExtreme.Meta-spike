@@ -1,15 +1,15 @@
 ﻿module.exports = function () {
     /**
-     * @class classA
+     * @class font
      */
     return {
 
         /**
          * @property
-         * @memberof classA
+         * @memberof font
          * @type {(int|string)}
-         * @default abc
+         * @default 14
          */
-        prop1: "abc"
+        size: 14
     };
 };

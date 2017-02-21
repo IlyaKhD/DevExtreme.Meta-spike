@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.GenericProp {
 
-    public class ClassA {
+    public class Font {
 
-        public GenericValue<int, string> Prop1 => new GenericValue<int, string>("abc");
+        public GenericValue<int, string> Size => new GenericValue<int, string>(14);
     }
 
 }
