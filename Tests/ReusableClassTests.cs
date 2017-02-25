@@ -54,17 +54,17 @@ namespace Tests {
         [Test]
         public void ReusableClass_CSHarpDefinitions() {
             var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.label).Namespace);
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.label), typeof(CSharpSample.viz.font) });
+            var meta = processor.GetMeta(new[] { typeof(CSharpSample.label), typeof(CSharpSample.viz.font) });
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(actual));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default)));
         }
 
         [Test]
         public void ReusableClass_JSDoc() {
             var processor = new JSDoc.Processor();
-            var actual = processor.GetMeta("ReusableClass.js");
+            var meta = processor.GetMeta("ReusableClass.js");
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(actual));
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default)));
         }
     }
 

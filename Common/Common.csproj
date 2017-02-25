@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="ClassMeta.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="LowerCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="PropertyMeta.cs" />
   </ItemGroup>
   <ItemGroup>

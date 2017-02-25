@@ -10,11 +10,18 @@ namespace Common {
         public readonly string Name;
         public readonly string[] Types;
         public readonly object Default;
+        public readonly PropertyMeta[] Props;
 
-        public PropertyMeta(string name, object defaultValue, IEnumerable<string> types) {
+        public PropertyMeta(
+            string name,
+            object defaultValue,
+            IEnumerable<string> types,
+            IEnumerable<PropertyMeta> props
+        ) {
             Name = name;
             Default = defaultValue;
             Types = types?.ToArray();
+            Props = props?.ToArray();
         }
 
         public static IEqualityComparer<PropertyMeta> Comparer = new EqualityComparerComparer();

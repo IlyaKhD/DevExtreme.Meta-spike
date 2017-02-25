@@ -10,14 +10,9 @@ namespace JSDoc {
 
     public class Processor {
 
-        public string GetMeta(params string[] fileNames) {
+        public IEnumerable<ClassMeta> GetMeta(params string[] fileNames) {
             var jsdoc = new JSDocCommand().Run(fileNames.Select(f => $"samples/{f}"));
-            var result = ParseOutput(jsdoc.Output);
-
-            return JsonConvert.SerializeObject(
-                result,
-                new JsonSerializerSettings { ContractResolver = new LowerCamelCasePropertyNamesContractResolver() }
-            );
+            return ParseOutput(jsdoc.Output);
         }
 
         static IEnumerable<ClassMeta> ParseOutput(string json) {
@@ -42,10 +37,11 @@ namespace JSDoc {
         }
 
         static PropertyMeta GetPropMeta(Hierarchy<JSDocEntry>.Entry entry) {
+            var nestedProps = entry.NestedEntries.Select(GetPropMeta);
             var types = entry.Value.Type.Names?.Select(GetTypeName);
             var defaultValue = GetDefaultValue(entry.Value.Defaultvalue, types?.First());
 
-            return new PropertyMeta(entry.Value.Name, defaultValue, types);
+            return new PropertyMeta(entry.Value.Name, defaultValue, types, nestedProps);
         }
 
         static object GetDefaultValue(string rawDefaultValue, string defaultType) {

@@ -18,13 +18,8 @@ namespace CSharpDefinitions {
             _rootNamespace = rootNamespace;
         }
 
-        public string GetMeta(IEnumerable<Type> types) {
-            var result = types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t)));
-
-            return JsonConvert.SerializeObject(
-                result,
-                new JsonSerializerSettings { ContractResolver = new LowerCamelCasePropertyNamesContractResolver() }
-            );
+        public IEnumerable<ClassMeta> GetMeta(IEnumerable<Type> types) {
+            return types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t)));
         }
 
         IEnumerable<PropertyMeta> GetClassProps(Type type) {
@@ -47,7 +42,8 @@ namespace CSharpDefinitions {
             return new PropertyMeta(
                 prop.Name.ToLowerCamelCase(),
                 defaultValue,
-                GetPropTypes(prop)
+                GetPropTypes(prop),
+                props: null
             );
         }
 

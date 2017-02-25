@@ -32,17 +32,17 @@ namespace Tests {
         [Test]
         public void GenericProp_CSHarpDefinitions() {
             var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.font).Namespace);
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.font) });
+            var meta = processor.GetMeta(new[] { typeof(CSharpSample.font) });
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default));
         }
 
         [Test]
         public void GenericProp_JSDoc() {
             var processor = new JSDoc.Processor();
-            var actual = processor.GetMeta("GenericProp.js");
+            var meta = processor.GetMeta("GenericProp.js");
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default));
         }
     }
 

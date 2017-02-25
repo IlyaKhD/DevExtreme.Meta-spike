@@ -79,17 +79,17 @@ namespace Tests {
         [Test]
         public void PropertyMap_CSHarpDefinitions() {
             var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.stockSeries).Namespace);
-            var actual = processor.GetMeta(new[] { typeof(CSharpSample.candleStickSeries), typeof(CSharpSample.stockSeries), typeof(CSharpSample.barSeries) });
+            var meta = processor.GetMeta(new[] { typeof(CSharpSample.candleStickSeries), typeof(CSharpSample.stockSeries), typeof(CSharpSample.barSeries) });
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default));
         }
 
         [Test]
         public void PropertyMap_JSDoc() {
             var processor = new JSDoc.Processor();
-            var actual = processor.GetMeta("PropertyMap.js");
+            var meta = processor.GetMeta("PropertyMap.js");
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default));
         }
     }
 

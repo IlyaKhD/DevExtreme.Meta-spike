@@ -66,6 +66,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{636cb942-275d-45b7-8468-28ae8ca35942}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpDefinitions\CSharpDefinitions.csproj">
       <Project>{27535361-0e80-4595-8c6d-af22bc229b62}</Project>
       <Name>CSharpDefinitions</Name>
