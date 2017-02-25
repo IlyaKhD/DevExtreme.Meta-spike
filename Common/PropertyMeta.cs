@@ -22,6 +22,8 @@ namespace Common {
             Default = defaultValue;
             Types = types?.ToArray();
             Props = props?.ToArray();
+            if(Props?.Length < 1)
+                Props = null;
         }
 
         public static IEqualityComparer<PropertyMeta> Comparer = new EqualityComparerComparer();

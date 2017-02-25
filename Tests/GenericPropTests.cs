@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Common;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,12 @@ namespace Tests {
             var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.font).Namespace);
             var meta = processor.GetMeta(new[] { typeof(CSharpSample.font) });
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default));
+            var actual = new Serializer(meta)
+                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
+                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props)
+                .Serialize();
+
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
 
         [Test]
@@ -42,7 +48,12 @@ namespace Tests {
             var processor = new JSDoc.Processor();
             var meta = processor.GetMeta("GenericProp.js");
 
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.Serialize(meta, p => p.Name, p => p.Types, p => p.Default));
+            var actual = new Serializer(meta)
+                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
+                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props)
+                .Serialize();
+
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
     }
 

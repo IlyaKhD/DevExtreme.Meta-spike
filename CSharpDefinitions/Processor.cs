@@ -19,7 +19,7 @@ namespace CSharpDefinitions {
         }
 
         public IEnumerable<ClassMeta> GetMeta(IEnumerable<Type> types) {
-            return types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t)));
+            return types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t), parentType: null));
         }
 
         IEnumerable<PropertyMeta> GetClassProps(Type type) {

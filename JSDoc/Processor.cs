@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace JSDoc {
@@ -31,14 +32,15 @@ namespace JSDoc {
                 .Select(c =>
                     new ClassMeta(
                         c.Value.Longname,
-                        c.NestedEntries.Select(GetPropMeta).OrderBy(p => p.Name)
+                        c.NestedEntries.Select(GetPropMeta).OrderBy(p => p.Name),
+                        c.Value.Augments?.FirstOrDefault()
                     )
                 );
         }
 
         static PropertyMeta GetPropMeta(Hierarchy<JSDocEntry>.Entry entry) {
-            var nestedProps = entry.NestedEntries.Select(GetPropMeta);
-            var types = entry.Value.Type.Names?.Select(GetTypeName);
+            var nestedProps = entry.NestedEntries.Select(GetPropMeta).OrderBy(p => p.Name);
+            var types = entry.Value.Type.Names?.Select(GetTypeName)?.OrderBy(t => t);
             var defaultValue = GetDefaultValue(entry.Value.Defaultvalue, types?.First());
 
             return new PropertyMeta(entry.Value.Name, defaultValue, types, nestedProps);
@@ -46,22 +48,25 @@ namespace JSDoc {
 
         static object GetDefaultValue(string rawDefaultValue, string defaultType) {
             if(String.IsNullOrEmpty(rawDefaultValue))
-                return null;
+                return rawDefaultValue;
 
             switch(defaultType) {
                 case "number":
                     int value;
                     Int32.TryParse(rawDefaultValue, out value);
                     return value;
-
-                default:
-                    return rawDefaultValue;
             }
+
+            return rawDefaultValue;
         }
 
         static string GetTypeName(string type) {
             if(type.Equals("int", StringComparison.OrdinalIgnoreCase))
                 return "number";
+
+            var match = Regex.Match(type, @"^Array\.<\((?<type>[^)]+)\)>");
+            if(match.Success)
+                return $"array<{match.Groups["type"]}>";
 
             return type;
         }
@@ -72,6 +77,7 @@ namespace JSDoc {
             public readonly bool Mixed;
             // class attrs
             public readonly string[] Mixes;
+            public readonly string[] Augments;
             // prop attrs
             public readonly string Longname;
             public readonly string Memberof;
@@ -83,6 +89,7 @@ namespace JSDoc {
                 string kind,
                 string name,
                 string[] mixes,
+                string[] augments,
                 string longname,
                 string memberof,
                 string defaultvalue,
@@ -92,6 +99,7 @@ namespace JSDoc {
                 Kind = kind;
                 Name = name;
                 Mixes = mixes;
+                Augments = augments;
                 Longname = longname;
                 Memberof = memberof;
                 Defaultvalue = defaultvalue;
