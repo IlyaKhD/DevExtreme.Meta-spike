@@ -5,7 +5,7 @@ var dxChart = {
 
     /**
      * @memberof dxChart
-     * @extends seriesSettings
+     * @mixes seriesSettings
      * @type {object}
      */
     commonSeriesSettings: {

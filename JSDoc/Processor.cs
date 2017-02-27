@@ -32,18 +32,32 @@ namespace JSDoc {
                 .Select(c =>
                     new ClassMeta(
                         c.Value.Longname,
-                        c.NestedEntries.Select(GetPropMeta).OrderBy(p => p.Name),
+                        GetProps(c).OrderBy(p => p.Name),
                         c.Value.Augments?.FirstOrDefault()
                     )
                 );
         }
 
         static PropertyMeta GetPropMeta(Hierarchy<JSDocEntry>.Entry entry) {
-            var nestedProps = entry.NestedEntries.Select(GetPropMeta).OrderBy(p => p.Name);
+            var nestedProps = GetProps(entry).OrderBy(p => p.Name);
             var types = entry.Value.Type.Names?.Select(GetTypeName)?.OrderBy(t => t);
             var defaultValue = GetDefaultValue(entry.Value.Defaultvalue, types?.First());
 
             return new PropertyMeta(entry.Value.Name, defaultValue, types, nestedProps);
+        }
+
+        static IEnumerable<PropertyMeta> GetProps(Hierarchy<JSDocEntry>.Entry entry) {
+            foreach(var nestedEntry in entry.NestedEntries) {
+                if(nestedEntry.Value.Kind == "member") {
+                    yield return GetPropMeta(nestedEntry);
+                    continue;
+                }
+
+                if(nestedEntry.Value.Kind == "mixin") {
+                    foreach(var mixedClassProp in GetProps(nestedEntry))
+                        yield return mixedClassProp;
+                }
+            }
         }
 
         static object GetDefaultValue(string rawDefaultValue, string defaultType) {

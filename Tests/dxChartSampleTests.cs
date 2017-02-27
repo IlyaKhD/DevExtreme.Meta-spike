@@ -29,6 +29,12 @@ namespace Tests {
                                     ""props"": null
                                 },
                                 {
+                                    ""name"": ""cornerRadius"",
+                                    ""types"": [ ""number""],
+                                    ""default"": 0,
+                                    ""props"": null
+                                },
+                                {
                                     ""name"": ""line"",
                                     ""types"": [ ""LineSeriesSettings""],
                                     ""default"": null,
@@ -38,6 +44,18 @@ namespace Tests {
                                     ""name"": ""type"",
                                     ""types"": [ ""string""],
                                     ""default"": ""line"",
+                                    ""props"": null
+                                },
+                                {
+                                    ""name"": ""valueField"",
+                                    ""types"": [ ""string""],
+                                    ""default"": ""val"",
+                                    ""props"": null
+                                },
+                                {
+                                    ""name"": ""width"",
+                                    ""types"": [ ""number""],
+                                    ""default"": 2,
                                     ""props"": null
                                 }
                             ]
