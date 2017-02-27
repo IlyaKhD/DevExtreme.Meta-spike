@@ -2,6 +2,7 @@
 using Common.Extensions;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,44 +20,66 @@ namespace CSharpDefinitions {
         }
 
         public IEnumerable<ClassMeta> GetMeta(IEnumerable<Type> types) {
-            return types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t), parentType: null));
+            return types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t).OrderBy(p => p.Name), parentType: GetRelTypeName(t.BaseType)));
         }
 
         IEnumerable<PropertyMeta> GetClassProps(Type type) {
             var instance = Activator.CreateInstance(type);
 
-            var interfaceProps = type.GetInterfaces()
-                .SelectMany(i => i.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance))
-                .Select(p => CreatePropMeta(p, p.GetCustomAttribute<PropertyValueAttribute>()?.Value));
+            var interfaceProps = new HashSet<string>();
+            var declaredInterfaceProps = type.GetInterfaces()
+                .Except(type.BaseType.GetInterfaces())
+                .SelectMany(i => i.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance));
 
-            var ownProps = type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
-                .Select(p => CreatePropMeta(p, p.GetValue(instance)))
-                .Except(interfaceProps, PropertyMeta.Comparer);
+            foreach(var prop in declaredInterfaceProps) {
+                yield return CreatePropMeta(prop, prop.GetCustomAttribute<PropertyValueAttribute>()?.Value);
+                interfaceProps.Add(prop.Name);
+            }
 
-            return ownProps.Concat(interfaceProps);
+            foreach(var prop in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)) {
+                if(interfaceProps.Contains(prop.Name))
+                    continue;
+
+                yield return CreatePropMeta(prop, prop.GetValue(instance));
+            }
         }
 
         PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {
             var defaultValue = propValue is IGenericValue ? ((IGenericValue)propValue).Value : propValue;
+            var propType = prop.PropertyType;
+            IEnumerable<PropertyMeta> nestedProps = null;
+
+            if(propType.IsNested) {
+                nestedProps = GetClassProps(propType).OrderBy(p => p.Name);
+                propType = typeof(object);
+            }
 
             return new PropertyMeta(
                 prop.Name.ToLowerCamelCase(),
                 defaultValue,
-                GetPropTypes(prop),
-                props: null
+                GetPropTypes(propType).OrderBy(t => t),
+                props: nestedProps
             );
         }
 
-        IEnumerable<string> GetPropTypes(PropertyInfo prop) {
-            var propType = prop.PropertyType;
+        IEnumerable<string> GetPropTypes(Type propType) {
+            if((propType.GetInterface(nameof(ICollection))) != null) {
+                var arrayMebersTypes = propType.GetGenericArguments().SelectMany(GetPropTypes);
+                yield return $"array<{String.Join("|", arrayMebersTypes)}>";
 
-            if(!typeof(IGenericValue).IsAssignableFrom(propType)) {
-                yield return GetTypeName(propType);
                 yield break;
             }
 
-            foreach(var type in propType.GetGenericArguments())
-                yield return GetTypeName(type);
+            if(typeof(IGenericValue).IsAssignableFrom(propType)) {
+                foreach(var nestedPropType in propType.GetGenericArguments()) {
+                    foreach(var type in GetPropTypes(nestedPropType))
+                        yield return type;
+                }
+
+                yield break;
+            }
+
+            yield return GetTypeName(propType);
         }
 
         string GetTypeName(Type type) {
@@ -70,11 +93,16 @@ namespace CSharpDefinitions {
             if(type == typeof(object))
                 return "object";
 
+            return GetRelTypeName(type) ?? type.FullName;
+        }
+
+        string GetRelTypeName(Type type) {
             if(type.FullName.StartsWith(_rootNamespace + "."))
                 return type.FullName.Substring(_rootNamespace.Length + 1);
 
-            return type.FullName;
+            return null;
         }
+
     }
 
 }

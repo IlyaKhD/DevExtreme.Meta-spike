@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using CSharpSample = CSharpDefinitions.Samples.dxChartSample;
+
 namespace Tests {
 
     public class dxChartSampleTests {
@@ -153,6 +155,21 @@ namespace Tests {
         public void dxChartSample_JSDoc() {
             var processor = new JSDoc.Processor();
             var meta = processor.GetMeta("dxChartSample.js");
+
+            var actual = new Serializer(meta).Serialize();
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
+        }
+
+        [Test]
+        public void dxChartSample_CSHarpDefinitions() {
+            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.dxChart).Namespace);
+            var meta = processor.GetMeta(new[] {
+                typeof(CSharpSample.dxChart),
+                typeof(CSharpSample.LineSeries),
+                typeof(CSharpSample.BarSeries),
+                typeof(CSharpSample.LineSeriesSettings),
+                typeof(CSharpSample.BarSeriesSettings)
+            });
 
             var actual = new Serializer(meta).Serialize();
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
