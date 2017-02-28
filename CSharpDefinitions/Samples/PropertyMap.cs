@@ -6,62 +6,35 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.PropertyMap {
 
-    public class candleStickSeries : InnerColor, OpenValueField, Reduction {
+    public class CandleStickSeries : SeriesSettings {
 
-        public string InnerColor => Any.STRING;
-        public string OpenValueField => Any.STRING;
-        public object Reduction => Any.STRING;
+        public new string InnerColor => base.InnerColor;
+        public new string OpenValueField => base.OpenValueField;
+        public new object Reduction => base.Reduction;
     }
 
-    public class barSeries : CornerRadius, MinBarSize {
+    public class BarSeries : SeriesSettings {
 
-        public int CornerRadius => Any.INT;
-        public int MinBarSize => Any.INT;
+        public new int CornerRadius => base.CornerRadius;
+        public new int MinBarSize => base.MinBarSize;
     }
 
-    public class stockSeries : OpenValueField, Reduction {
+    public class StockSeries : SeriesSettings{
 
         public string HoverMode => "onlyPoint";
-        public string OpenValueField => Any.STRING;
-        public object Reduction => Any.STRING;
+
+        public new string OpenValueField => base.OpenValueField;
+        public new object Reduction => base.Reduction;
     }
 
-    #region CommonProps definitions
+    public class SeriesSettings {
 
-    interface OpenValueField {
+        protected virtual string OpenValueField => "open";
+        protected virtual int CornerRadius => 0;
+        protected virtual int MinBarSize => 0;
+        protected virtual object Reduction => null;
+        protected virtual string InnerColor => "#ffffff";
 
-        [PropertyValue("open")]
-        string OpenValueField { get; }
-    }
-
-    interface CornerRadius {
-
-        [PropertyValue(0)]
-        int CornerRadius { get; }
-    }
-
-    interface MinBarSize {
-
-        [PropertyValue(0)]
-        int MinBarSize { get; }
-    }
-
-    interface Reduction {
-
-        object Reduction { get; }
-    }
-
-    interface InnerColor {
-
-        [PropertyValue("#ffffff")]
-        string InnerColor { get; }
-    }
-
-    #endregion
-
-    static class Any {
-        public const int INT = Int32.MaxValue;
-        public const string STRING = "";
     }
 
 }

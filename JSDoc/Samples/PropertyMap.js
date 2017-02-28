@@ -1,6 +1,6 @@
 ﻿module.exports = function () {
     /**
-     * @class candleStickSeries
+     * @class CandleStickSeries
      * @mixes commonProps.innerColor
      * @mixes commonProps.reduction
      * @mixes commonProps.openValueField
@@ -11,7 +11,7 @@
 
 module.exports = function () {
     /**
-     * @class stockSeries
+     * @class StockSeries
      * @mixes commonProps.reduction
      * @mixes commonProps.openValueField
      */
@@ -19,7 +19,7 @@ module.exports = function () {
 
         /**
          * @property
-         * @memberof stockSeries
+         * @memberof StockSeries
          * @type {string}
          * @default onlyPoint
          */
@@ -30,7 +30,7 @@ module.exports = function () {
 
 module.exports = function () {
     /**
-     * @class barSeries
+     * @class BarSeries
      * @mixes commonProps.cornerRadius
      * @mixes commonProps.minBarSize
      */

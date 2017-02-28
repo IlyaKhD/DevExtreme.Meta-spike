@@ -26,22 +26,8 @@ namespace CSharpDefinitions {
         IEnumerable<PropertyMeta> GetClassProps(Type type) {
             var instance = Activator.CreateInstance(type);
 
-            var interfaceProps = new HashSet<string>();
-            var declaredInterfaceProps = type.GetInterfaces()
-                .Except(type.BaseType.GetInterfaces())
-                .SelectMany(i => i.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance));
-
-            foreach(var prop in declaredInterfaceProps) {
-                yield return CreatePropMeta(prop, prop.GetCustomAttribute<PropertyValueAttribute>()?.Value);
-                interfaceProps.Add(prop.Name);
-            }
-
-            foreach(var prop in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)) {
-                if(interfaceProps.Contains(prop.Name))
-                    continue;
-
+            foreach(var prop in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance))
                 yield return CreatePropMeta(prop, prop.GetValue(instance));
-            }
         }
 
         PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {

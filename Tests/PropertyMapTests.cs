@@ -16,7 +16,7 @@ namespace Tests {
         @"
                 [
                     {
-                        ""name"": ""candleStickSeries"",
+                        ""name"": ""CandleStickSeries"",
                         ""props"":
                         [
                             {
@@ -37,7 +37,7 @@ namespace Tests {
                         ]
                     },
                     {
-                        ""name"": ""stockSeries"",
+                        ""name"": ""StockSeries"",
                         ""props"":
                         [
                             {
@@ -58,7 +58,7 @@ namespace Tests {
                         ]
                     },
                     {
-                        ""name"": ""barSeries"",
+                        ""name"": ""BarSeries"",
                         ""props"":
                         [
                             {
@@ -79,8 +79,8 @@ namespace Tests {
 
         [Test]
         public void PropertyMap_CSHarpDefinitions() {
-            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.stockSeries).Namespace);
-            var meta = processor.GetMeta(new[] { typeof(CSharpSample.candleStickSeries), typeof(CSharpSample.stockSeries), typeof(CSharpSample.barSeries) });
+            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.StockSeries).Namespace);
+            var meta = processor.GetMeta(new[] { typeof(CSharpSample.CandleStickSeries), typeof(CSharpSample.StockSeries), typeof(CSharpSample.BarSeries) });
 
             var actual = new Serializer(meta)
                 .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)

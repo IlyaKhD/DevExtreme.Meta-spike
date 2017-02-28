@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CSharpDefinitions.Samples.dxChartSampleHidden;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,15 +12,15 @@ namespace CSharpDefinitions.Samples.dxChartSample {
         public CommonSeriesSettings commonSeriesSettings => null;
         public GenericValue<BarSeries, LineSeries, GenericValue<BarSeries, LineSeries>[]> series => null;
 
-        public class CommonSeriesSettings : SeriesSettings.cornerRadius, SeriesSettings.valueField, SeriesSettings.width {
+        public class CommonSeriesSettings : SeriesSettings {
 
             public string type => "line";
             public LineSeriesSettings line => null;
             public BarSeriesSettings bar => null;
 
-            public int cornerRadius => Any.INT;
-            public string valueField => Any.STRING;
-            public int width => Any.INT;
+            public new string valueField => base.valueField;
+            public new int cornerRadius => base.cornerRadius;
+            public new int width => base.width;
         }
     }
 
@@ -35,42 +36,26 @@ namespace CSharpDefinitions.Samples.dxChartSample {
         public string name => null;
     }
 
-    public class LineSeriesSettings : SeriesSettings.valueField, SeriesSettings.width {
+    public class LineSeriesSettings : SeriesSettings {
 
-        public string valueField => Any.STRING;
-        public int width => Any.INT;
+        public new string valueField => base.valueField;
+        public new int width => base.width;
     }
 
-    public class BarSeriesSettings : SeriesSettings.cornerRadius, SeriesSettings.valueField {
+    public class BarSeriesSettings : SeriesSettings {
 
-        public int cornerRadius => Any.INT;
-        public string valueField => Any.STRING;
+        public new int cornerRadius => base.cornerRadius;
+        public new string valueField => base.valueField;
     }
 
-    namespace SeriesSettings {
+}
 
-        interface valueField {
+namespace CSharpDefinitions.Samples.dxChartSampleHidden {
 
-            [PropertyValue("val")]
-            string valueField { get; }
-        }
+    public class SeriesSettings {
 
-        interface width {
-            
-            [PropertyValue(2)]
-            int width { get; }
-        }
-
-        interface cornerRadius {
-
-            [PropertyValue(0)]
-            int cornerRadius { get; }
-        }
+        protected virtual string valueField => "val";
+        protected virtual int width => 2;
+        protected virtual int cornerRadius => 0;
     }
-
-    static class Any {
-        public const int INT = Int32.MaxValue;
-        public const string STRING = "";
-    }
-
 }

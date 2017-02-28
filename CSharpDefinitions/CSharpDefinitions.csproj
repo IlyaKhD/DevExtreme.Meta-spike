@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GenericValue.cs" />
+    <Compile Include="IgnoreNotOverridenAttribute.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PropertyValueAttribute.cs" />
