@@ -54,6 +54,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="AxisSettingsTests.cs" />
     <Compile Include="dxChartSampleTests.cs" />
     <Compile Include="ReusableClassTests.cs" />
     <Compile Include="GenericPropTests.cs" />
