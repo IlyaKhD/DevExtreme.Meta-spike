@@ -144,6 +144,17 @@ namespace Tests {
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
+
+        [Test]
+        public void AxisSettings_JSDoc()
+        {
+            var processor = new JSDoc.Processor();
+            var meta = processor.GetMeta("AxisSettings.js");
+
+            var actual = new Serializer(meta).Serialize();
+            var expected = Utils.NormalizeJson(EXPECTED);
+            Assert.AreEqual(expected, actual);
+        }
     }
 
 }
