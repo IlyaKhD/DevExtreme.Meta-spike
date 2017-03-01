@@ -49,7 +49,7 @@ namespace Tests {
                             ""default"": 10
                         }
                     ],
-                    ""parentType"": null
+                    ""parentType"": ""ChartCommonAxisSettings""
                 },
                 {
                     ""name"": ""PolarAxis"",
@@ -117,18 +117,6 @@ namespace Tests {
         ";
         #endregion
 
-        [Test]
-        public void AxisSettings_CSHarpDefinitions() {
-            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.PolarAxis).Namespace);
-            var meta = processor.GetMeta(new[] { typeof(CSharpSample.PolarAxis) });
-
-            var actual = new Serializer(meta)
-                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
-                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props)
-                .Serialize();
-
-            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
-        }
     }
 
 }
