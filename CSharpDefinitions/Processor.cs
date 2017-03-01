@@ -24,6 +24,17 @@ namespace CSharpDefinitions {
         }
 
         IEnumerable<PropertyMeta> GetClassProps(Type type) {
+            var multiBase = type.GetInterfaces().FirstOrDefault(i => typeof(Mixes).IsAssignableFrom(i));
+            if(multiBase != null) {
+                foreach(var parentProp in multiBase.GetGenericArguments().SelectMany(GetClassProps))
+                    yield return parentProp;
+            };
+
+            if(typeof(IMixin).IsAssignableFrom(type.BaseType)) {
+                foreach(var parentProp in GetClassProps(type.BaseType))
+                    yield return parentProp;
+            }
+
             var instance = Activator.CreateInstance(type);
 
             foreach(var prop in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance))

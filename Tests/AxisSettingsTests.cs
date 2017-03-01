@@ -125,6 +125,25 @@ namespace Tests {
         ";
         #endregion
 
+        [Test]
+        public void AxisSettings_CSHarpDefinitions() {
+            var processor = new CSharpDefinitions.Processor(typeof(CSharpSample.PolarAxis).Namespace);
+            var meta = processor.GetMeta(new[] {
+                typeof(CSharpSample.dxChartOptions),
+                typeof(CSharpSample.dxPolarChartOptions),
+                typeof(CSharpSample.ChartAxis),
+                typeof(CSharpSample.PolarAxis),
+                typeof(CSharpSample.ChartCommonAxisSettings),
+                typeof(CSharpSample.PolarCommonAxisSettings),
+            });
+
+            var actual = new Serializer(meta)
+                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default, p => p.Props)
+                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props, c => c.ParentType)
+                .Serialize();
+
+            Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
+        }
     }
 
 }
