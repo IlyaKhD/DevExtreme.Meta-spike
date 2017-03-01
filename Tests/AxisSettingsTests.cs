@@ -22,7 +22,8 @@ namespace Tests {
                         {
                             ""name"": ""commonAxisSettings"",
                             ""types"": [ ""ChartCommonAxisSettings"" ],
-                            ""default"": null
+                            ""default"": null,
+                            ""props"": null
                         }
                     ],
                     ""parentType"": null
@@ -34,7 +35,8 @@ namespace Tests {
                         {
                             ""name"": ""commonAxisSettings"",
                             ""types"": [ ""PolarCommonAxisSettings"" ],
-                            ""default"": null
+                            ""default"": null,
+                            ""props"": null
                         }
                     ],
                     ""parentType"": null
@@ -46,7 +48,8 @@ namespace Tests {
                         {
                             ""name"": ""logarithmBase"",
                             ""types"": [ ""number"" ],
-                            ""default"": 10
+                            ""default"": 10,
+                            ""props"": null
                         }
                     ],
                     ""parentType"": ""ChartCommonAxisSettings""
@@ -58,7 +61,8 @@ namespace Tests {
                         {
                             ""name"": ""logarithmBase"",
                             ""types"": [ ""number"" ],
-                            ""default"": 10
+                            ""default"": 10,
+                            ""props"": null
                         }
                     ],
                     ""parentType"": ""PolarCommonAxisSettings""
@@ -76,12 +80,14 @@ namespace Tests {
                                 {
                                     ""name"": ""alignment"",
                                     ""types"": [ ""string"" ],
-                                    ""default"": null
+                                    ""default"": null,
+                                    ""props"": null
                                 },
                                 {
                                     ""name"": ""indentFromAxis"",
                                     ""types"": [ ""number"" ],
-                                    ""default"": 5
+                                    ""default"": 5,
+                                    ""props"": null
                                 }
                             ]
                         }
@@ -99,14 +105,16 @@ namespace Tests {
                             ""props"": 
                             [
                                 {
-                                    ""name"": ""overlappingBehavior"",
-                                    ""types"": [ ""string"" ],
-                                    ""default"": ""enlargeTickInterval""
-                                },
-                                {
                                     ""name"": ""indentFromAxis"",
                                     ""types"": [ ""number"" ],
-                                    ""default"": 5
+                                    ""default"": 5,
+                                    ""props"": null
+                                },
+                                {
+                                    ""name"": ""overlappingBehavior"",
+                                    ""types"": [ ""string"" ],
+                                    ""default"": ""enlargeTickInterval"",
+                                    ""props"": null
                                 }
                             ]
                         }
