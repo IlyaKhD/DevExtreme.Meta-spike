@@ -1,40 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.PropertyMap {
 
-    public class CandleStickSeries : SeriesSettings {
+    public interface CandleStickSeries {
 
-        public new string InnerColor => base.InnerColor;
-        public new string OpenValueField => base.OpenValueField;
-        public new object Reduction => base.Reduction;
+        SeriesSettings.InnerColor InnerColor { get; }
+        SeriesSettings.OpenValueField OpenValueField { get; }
+        SeriesSettings.Reduction Reduction { get; }
     }
 
-    public class BarSeries : SeriesSettings {
+    public interface BarSeries {
 
-        public new int CornerRadius => base.CornerRadius;
-        public new int MinBarSize => base.MinBarSize;
+        SeriesSettings.CornerRadius CornerRadius { get; }
+        SeriesSettings.MinBarSize MinBarSize { get; }
     }
 
-    public class StockSeries : SeriesSettings{
+    public interface StockSeries {
 
-        public string HoverMode => "onlyPoint";
+        [DefaultValue("onlyPoint")]
+        string HoverMode { get; }
 
-        public new string OpenValueField => base.OpenValueField;
-        public new object Reduction => base.Reduction;
+        SeriesSettings.OpenValueField OpenValueField { get; }
+        SeriesSettings.Reduction Reduction { get; }
     }
 
-    public class SeriesSettings {
+    namespace SeriesSettings {
 
-        protected virtual string OpenValueField => "open";
-        protected virtual int CornerRadius => 0;
-        protected virtual int MinBarSize => 0;
-        protected virtual object Reduction => null;
-        protected virtual string InnerColor => "#ffffff";
+        [DefaultValue("open")]
+        public class OpenValueField : Alias<string> { }
 
+        [DefaultValue(0)]
+        public class CornerRadius : Alias<int> { }
+
+        [DefaultValue(0)]
+        public class MinBarSize : Alias<int> { }
+
+        public class Reduction : Alias<object> { }
+
+        [DefaultValue("#ffffff")]
+        public class InnerColor : Alias<string> { }
     }
 
 }

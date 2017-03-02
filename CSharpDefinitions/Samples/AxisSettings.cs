@@ -1,55 +1,60 @@
-﻿using CSharpDefinitions.Samples.AxisSettings_Hidden;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.AxisSettings {
 
-    public class dxChartOptions {
-        public ChartCommonAxisSettings commonAxisSettings => null;
+    public interface dxChartOptions {
+
+        ChartCommonAxisSettings commonAxisSettings { get; }
     }
 
-    public class dxPolarChartOptions {
-        public PolarCommonAxisSettings commonAxisSettings => null;
+    public interface dxPolarChartOptions {
+
+        PolarCommonAxisSettings commonAxisSettings { get; }
     }
 
-    public class ChartAxis : ChartCommonAxisSettings, Mixes<Axis> { }
+    public interface ChartAxis : ChartCommonAxisSettings, Axis { }
 
-    public class PolarAxis : PolarCommonAxisSettings, Mixes<Axis> { }
+    public interface PolarAxis : PolarCommonAxisSettings, Axis { }
 
-    public class ChartCommonAxisSettings {
+    public interface ChartCommonAxisSettings {
 
-        public Label label => null;
-
-        public class Label : CommonAxisLabelSettings {
-
-            public string alignment => null;
-        }
+        ChartAxisLabel label { get; }
     }
 
-    public class PolarCommonAxisSettings {
+    public interface PolarCommonAxisSettings {
 
-        public Label label => null;
-
-        public class Label : CommonAxisLabelSettings {
-
-            public string overlappingBehavior => "enlargeTickInterval";
-        }
+        PolarAxisLabel label { get; }
     }
 
-}
+    [InjectedType]
+    public interface ChartAxisLabel : CommonAxisLabelSettings {
 
-namespace CSharpDefinitions.Samples.AxisSettings_Hidden {
-
-    public class Axis {
-
-        public int logarithmBase => 10;
+        string alignment { get; }
     }
 
-    public class CommonAxisLabelSettings : IMixin {
+    [InjectedType]
+    public interface PolarAxisLabel : CommonAxisLabelSettings {
 
-        public int indentFromAxis => 5;
+        [DefaultValue("enlargeTickInterval")]
+        string overlappingBehavior { get; }
+    }
+
+    [InjectedType]
+    public interface Axis {
+
+        [DefaultValue(10)]
+        int logarithmBase { get; }
+    }
+
+    [InjectedType]
+    public interface CommonAxisLabelSettings {
+
+        [DefaultValue(5)]
+        int indentFromAxis { get; }
     }
 }

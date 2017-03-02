@@ -40,12 +40,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericValue.cs" />
-    <Compile Include="IMixin.cs" />
-    <Compile Include="Mixes.cs" />
+    <Compile Include="Alias.cs" />
+    <Compile Include="InjectedTypeAttribute.cs" />
+    <Compile Include="Union.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="PropertyValueAttribute.cs" />
     <Compile Include="Samples\AxisSettings.cs" />
     <Compile Include="Samples\dxChartSample.cs" />
     <Compile Include="Samples\GenericProp.cs" />

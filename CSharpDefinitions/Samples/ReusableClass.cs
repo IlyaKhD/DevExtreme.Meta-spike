@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.ReusableClass {
 
-    public class label {
+    public interface label {
 
-        public viz.font Font { get; }
+        viz.font Font { get; }
     }
 
     namespace viz {
 
-        public class font {
+        public interface font {
 
-            public string Color => "#FFFFFF";
-            public string Family => "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana";
-            public int Weight => 400;
+            [DefaultValue("#FFFFFF")]
+            string Color { get; }
+
+            [DefaultValue("'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana")]
+            string Family { get; }
+
+            [DefaultValue(400)]
+            int Weight { get; }
         }
     }
 
