@@ -6,36 +6,36 @@ using System.Threading.Tasks;
 
 namespace CSharpDefinitions {
 
-    internal interface IUnion {
+    internal interface IGenericValue {
         object Value { get; }
     }
 
-    public class Union<T1, T2> : IUnion {
+    public class GenericValue<T1, T2> : IGenericValue {
 
         public object Value { get; private set; }
 
-        public Union(T1 value) {
+        public GenericValue(T1 value) {
             Value = value;
         }
 
-        public Union(T2 value) {
+        public GenericValue(T2 value) {
             Value = value;
         }
     }
 
-    public class Union<T1, T2, T3> : IUnion {
+    public class GenericValue<T1, T2, T3> : IGenericValue {
 
         public object Value { get; private set; }
 
-        public Union(T1 value) {
+        public GenericValue(T1 value) {
             Value = value;
         }
 
-        public Union(T2 value) {
+        public GenericValue(T2 value) {
             Value = value;
         }
 
-        public Union(T3 value) {
+        public GenericValue(T3 value) {
             Value = value;
         }
     }

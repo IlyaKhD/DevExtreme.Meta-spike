@@ -8,7 +8,7 @@ namespace CSharpDefinitions.Samples.GenericProp {
 
     public class font {
 
-        public Union<int, string> Size => new Union<int, string>(14);
+        public GenericValue<int, string> Size => new GenericValue<int, string>(14);
     }
 
 }

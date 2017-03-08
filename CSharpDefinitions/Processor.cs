@@ -42,7 +42,7 @@ namespace CSharpDefinitions {
         }
 
         PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {
-            var defaultValue = propValue is IUnion ? ((IUnion)propValue).Value : propValue;
+            var defaultValue = propValue is IGenericValue ? ((IGenericValue)propValue).Value : propValue;
             var propType = prop.PropertyType;
             IEnumerable<PropertyMeta> nestedProps = null;
 
@@ -67,7 +67,7 @@ namespace CSharpDefinitions {
                 yield break;
             }
 
-            if(typeof(IUnion).IsAssignableFrom(propType)) {
+            if(typeof(IGenericValue).IsAssignableFrom(propType)) {
                 foreach(var nestedPropType in propType.GetGenericArguments()) {
                     foreach(var type in GetPropTypes(nestedPropType))
                         yield return type;

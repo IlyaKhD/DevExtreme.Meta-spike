@@ -10,7 +10,7 @@ namespace CSharpDefinitions.Samples.dxChartSample {
     public class dxChart {
 
         public CommonSeriesSettings commonSeriesSettings => null;
-        public Union<BarSeries, LineSeries, Union<BarSeries, LineSeries>[]> series => null;
+        public GenericValue<BarSeries, LineSeries, GenericValue<BarSeries, LineSeries>[]> series => null;
 
         public class CommonSeriesSettings : SeriesSettings {
 
