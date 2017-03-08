@@ -1,5 +1,5 @@
 ﻿namespace CSharpDefinitions {
 
-    internal interface IMixin { }
+    public interface Alias<T> { }
 
 }

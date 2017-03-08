@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,34 +21,45 @@ namespace CSharpDefinitions {
         }
 
         public IEnumerable<ClassMeta> GetMeta(IEnumerable<Type> types) {
-            return types.Select(t => new ClassMeta(GetTypeName(t), GetClassProps(t).OrderBy(p => p.Name), parentType: GetRelTypeName(t.BaseType)));
+            return types.Select(
+                t => new ClassMeta(
+                    GetTypeName(t),
+                    GetClassProps(t).OrderBy(p => p.Name),
+                    parentType: GetRelTypeName(GetParents(t).FirstOrDefault())
+                )
+            );
         }
 
         IEnumerable<PropertyMeta> GetClassProps(Type type) {
-            var multiBase = type.GetInterfaces().FirstOrDefault(i => typeof(Mixes).IsAssignableFrom(i));
-            if(multiBase != null) {
-                foreach(var parentProp in multiBase.GetGenericArguments().SelectMany(GetClassProps))
-                    yield return parentProp;
-            };
+            foreach(var parent in GetParents(type)) {
+                if(!IsInlineType(parent))
+                    continue;
 
-            if(typeof(IMixin).IsAssignableFrom(type.BaseType)) {
-                foreach(var parentProp in GetClassProps(type.BaseType))
+                foreach(var parentProp in GetClassProps(parent))
                     yield return parentProp;
             }
 
-            var instance = Activator.CreateInstance(type);
-
             foreach(var prop in type.GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance))
-                yield return CreatePropMeta(prop, prop.GetValue(instance));
+                yield return CreatePropMeta(prop);
         }
 
-        PropertyMeta CreatePropMeta(PropertyInfo prop, object propValue) {
-            var defaultValue = propValue is IGenericValue ? ((IGenericValue)propValue).Value : propValue;
+        PropertyMeta CreatePropMeta(PropertyInfo prop) {
+            var defaultValue = prop.GetCustomAttribute<DefaultValueAttribute>()?.Value;
             var propType = prop.PropertyType;
+
+            var aliasedType = GetAliasedType(propType);
+            if(aliasedType != null) {
+                defaultValue = defaultValue ?? propType.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+                propType = aliasedType;
+            }
+
+            if(defaultValue is Union)
+                defaultValue = ((Union)defaultValue).Value;
+
             IEnumerable<PropertyMeta> nestedProps = null;
 
-            if(propType.IsNested) {
-                nestedProps = GetClassProps(propType).OrderBy(p => p.Name);
+            if(IsInlineType(propType)) {
+                nestedProps = GetClassProps(propType).OrderBy(p => p.Name).ToArray();
                 propType = typeof(object);
             }
 
@@ -67,7 +79,7 @@ namespace CSharpDefinitions {
                 yield break;
             }
 
-            if(typeof(IGenericValue).IsAssignableFrom(propType)) {
+            if(typeof(Union).IsAssignableFrom(propType)) {
                 foreach(var nestedPropType in propType.GetGenericArguments()) {
                     foreach(var type in GetPropTypes(nestedPropType))
                         yield return type;
@@ -94,11 +106,26 @@ namespace CSharpDefinitions {
         }
 
         string GetRelTypeName(Type type) {
-            if(type.FullName.StartsWith(_rootNamespace + "."))
+            if(type?.FullName?.StartsWith(_rootNamespace + ".") == true)
                 return type.FullName.Substring(_rootNamespace.Length + 1);
 
             return null;
         }
+
+        static IEnumerable<Type> GetParents(Type type) {
+            var allInterfaces = type.GetInterfaces();
+            return allInterfaces.Except(allInterfaces.SelectMany(i => i.GetInterfaces()));
+        }
+
+        static Type GetAliasedType(Type type) {
+            return type
+                .GetInterfaces()
+                .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(Alias<>))
+                ?.GetGenericArguments()
+                ?.FirstOrDefault();
+        }
+
+        static bool IsInlineType(Type type) => type?.GetCustomAttribute<InjectedTypeAttribute>() != null;
 
     }
 

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.GenericProp {
 
-    public class font {
+    public interface font {
 
-        public GenericValue<int, string> Size => new GenericValue<int, string>(14);
+        [DefaultValue(14)]
+        Union<int, string> Size { get; }
     }
 
 }

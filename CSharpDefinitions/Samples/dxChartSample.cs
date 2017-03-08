@@ -1,61 +1,68 @@
-﻿using CSharpDefinitions.Samples.dxChartSampleHidden;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CSharpDefinitions.Samples.dxChartSample {
 
-    public class dxChart {
+    public interface dxChart {
 
-        public CommonSeriesSettings commonSeriesSettings => null;
-        public GenericValue<BarSeries, LineSeries, GenericValue<BarSeries, LineSeries>[]> series => null;
-
-        public class CommonSeriesSettings : SeriesSettings {
-
-            public string type => "line";
-            public LineSeriesSettings line => null;
-            public BarSeriesSettings bar => null;
-
-            public new string valueField => base.valueField;
-            public new int cornerRadius => base.cornerRadius;
-            public new int width => base.width;
-        }
+        CommonSeriesSettings commonSeriesSettings { get; }
+        Union<BarSeries, LineSeries, Union<BarSeries, LineSeries>[]> series { get; }
     }
 
-    public class LineSeries : LineSeriesSettings {
+    [InjectedType]
+    public interface CommonSeriesSettings {
 
-        public string type => "line";
-        public string name => null;
+        [DefaultValue("line")]
+        string type { get; }
+        LineSeriesSettings line { get; }
+        BarSeriesSettings bar { get; }
+
+        SeriesSettings.valueField valueField { get; set; }
+        SeriesSettings.cornerRadius cornerRadius { get; set; }
+        SeriesSettings.width width { get; set; }
     }
 
-    public class BarSeries : BarSeriesSettings {
 
-        public string type => "bar";
-        public string name => null;
+    public interface LineSeries : LineSeriesSettings {
+
+        [DefaultValue("line")]
+        string type { get; }
+        string name { get; }
     }
 
-    public class LineSeriesSettings : SeriesSettings {
+    public interface BarSeries : BarSeriesSettings {
 
-        public new string valueField => base.valueField;
-        public new int width => base.width;
+        [DefaultValue("bar")]
+        string type { get; }
+        string name { get; }
     }
 
-    public class BarSeriesSettings : SeriesSettings {
+    public interface LineSeriesSettings {
 
-        public new int cornerRadius => base.cornerRadius;
-        public new string valueField => base.valueField;
+        SeriesSettings.valueField valueField { get; set; }
+        SeriesSettings.width width { get; set; }
     }
 
-}
+    public interface BarSeriesSettings {
 
-namespace CSharpDefinitions.Samples.dxChartSampleHidden {
+        SeriesSettings.cornerRadius cornerRadius { get; }
+        SeriesSettings.valueField valueField { get; }
+    }
 
-    public class SeriesSettings {
+    namespace SeriesSettings {
 
-        protected virtual string valueField => "val";
-        protected virtual int width => 2;
-        protected virtual int cornerRadius => 0;
+        [DefaultValue("val")]
+        public class valueField : Alias<string> { }
+
+        [DefaultValue(2)]
+        public class width : Alias<int> { }
+
+        [DefaultValue(0)]
+        public class cornerRadius : Alias<int> { }
+
     }
 }
