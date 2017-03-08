@@ -60,6 +60,7 @@
     <Compile Include="GenericPropTests.cs" />
     <Compile Include="PropertyMapTests.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="TsDeclarations\GeneratorTests.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\JSDoc\JSDoc.csproj">
       <Project>{d3f6509b-c18c-408d-8058-c6d602b01332}</Project>
       <Name>JSDoc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TsDeclarations\TsDeclarations.csproj">
+      <Project>{fec70f45-7ebc-41a8-bf93-8b09c77bbc2a}</Project>
+      <Name>TsDeclarations</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

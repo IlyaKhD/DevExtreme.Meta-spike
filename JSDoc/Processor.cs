@@ -43,7 +43,7 @@ namespace JSDoc {
             var types = entry.Value.Type.Names?.Select(GetTypeName)?.OrderBy(t => t);
             var defaultValue = GetDefaultValue(entry.Value.Defaultvalue, types?.First());
 
-            return new PropertyMeta(entry.Value.Name, defaultValue, types, nestedProps);
+            return new PropertyMeta(entry.Value.Name, types, defaultValue, nestedProps);
         }
 
         static IEnumerable<PropertyMeta> GetProps(Hierarchy<JSDocEntry>.Entry entry) {

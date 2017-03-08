@@ -14,9 +14,9 @@ namespace Common {
 
         public PropertyMeta(
             string name,
-            object defaultValue,
             IEnumerable<string> types,
-            IEnumerable<PropertyMeta> props
+            object defaultValue = null,
+            IEnumerable<PropertyMeta> props = null
         ) {
             Name = name;
             Default = defaultValue;

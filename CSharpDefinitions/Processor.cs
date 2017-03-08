@@ -65,8 +65,8 @@ namespace CSharpDefinitions {
 
             return new PropertyMeta(
                 prop.Name.ToLowerCamelCase(),
-                defaultValue,
                 GetPropTypes(propType).OrderBy(t => t),
+                defaultValue,
                 props: nestedProps
             );
         }
