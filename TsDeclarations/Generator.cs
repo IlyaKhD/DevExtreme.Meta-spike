@@ -19,6 +19,9 @@ namespace TsDeclarations {
 
                 foreach(var prop in classMeta.Props)
                     writer.AppendProp(prop);
+                
+                foreach (var method in classMeta.Methods)
+                    writer.AppendMethod(method);
 
                 writer.EndInterface();
             }
@@ -57,6 +60,30 @@ namespace TsDeclarations {
                 AppendLine($"{prop.Name}: {prop.Types.FirstOrDefault()};");
 
                 return this;
+            }
+
+            public Writer AppendMethod(MethodMeta method)
+            {
+                AppendLine($"{method.Name}({getArgsString(method.Args)}): {method.ReturnType};");
+
+                return this;
+            }
+
+            string getArgsString(PropertyMeta[] args)
+            {
+                string result = "";
+                if (args == null) {
+                    return result;
+                }
+
+                foreach (var arg in args)
+                {
+                    result += $"{arg.Name}: {arg.Types.FirstOrDefault()},";
+                }
+                result = result.Remove(result.Length - 1);
+                
+
+                return result;
             }
 
             public Writer EndModule() => EndBlock();

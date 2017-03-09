@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ClassMeta.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="MethodMeta.cs" />
     <Compile Include="PropertyMeta.cs" />
   </ItemGroup>
   <ItemGroup>

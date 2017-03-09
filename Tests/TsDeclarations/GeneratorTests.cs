@@ -16,16 +16,6 @@ namespace Tests.TsDeclarations {
         public void TS_Generates_vizCharts() {
             #region expected
 
-            // TODO: add functions:
-            //      BaseSeries:
-            // isSelected(): boolean;
-            // getColor(): string;
-            // getPointByPos(positionIndex: number): Object;
-            // getAllPoints(): Array<BasePoint>;
-            // show(): void;
-            //      BasePoint
-            // getLabel(): any;
-
             var expected = @"
                 declare module DevExpress.viz.charts {
 
@@ -33,6 +23,11 @@ namespace Tests.TsDeclarations {
 
                         fullState: number;
                         name: string;
+                        isSelected(): boolean;
+                        getColor(): string;
+                        getPointByPos(positionIndex: number): Object;
+                        getAllPoints(): Array<BasePoint>;
+                        show(): void;
                     }
 
                     export interface BasePoint {
@@ -40,6 +35,7 @@ namespace Tests.TsDeclarations {
                         fullState: number;
                         originalArgument: any;
                         series: BaseSeries;
+                        getLabel(): any;
                     }
                 }
             ";
@@ -53,6 +49,13 @@ namespace Tests.TsDeclarations {
                         new PropertyMeta("fullState", new [] { "number" }),
                         new PropertyMeta("name", new [] { "string" })
                     },
+                    new [] {
+                        new MethodMeta("isSelected", "boolean"),
+                        new MethodMeta("getColor", "string"),
+                        new MethodMeta("getPointByPos", "Object", new [] { new PropertyMeta("positionIndex", new [] { "number" }) }),
+                        new MethodMeta("getAllPoints", "Array<BasePoint>"),
+                        new MethodMeta("show", "void")
+                    },
                     parentType: null
                 ),
                 new ClassMeta(
@@ -61,6 +64,9 @@ namespace Tests.TsDeclarations {
                         new PropertyMeta("fullState", new [] { "number" }),
                         new PropertyMeta("originalArgument", new [] { "any" }),
                         new PropertyMeta("series", new [] { "BaseSeries" }),
+                    },
+                    new [] {
+                        new MethodMeta("getLabel", "any")
                     },
                     parentType: null
                 )

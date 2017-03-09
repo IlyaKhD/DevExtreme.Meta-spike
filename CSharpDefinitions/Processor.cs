@@ -25,16 +25,19 @@ namespace CSharpDefinitions {
                 t => new ClassMeta(
                     GetTypeName(t),
                     GetClassProps(t).OrderBy(p => p.Name),
+                    GetClassMethods(t).OrderBy(p => p.Name),
                     parentType: GetRelTypeName(GetParents(t).FirstOrDefault())
                 )
             );
         }
 
-        IEnumerable<PropertyMeta> GetClassProps(Type type) {
-            foreach(var parent in GetParents(type)) {
+        IEnumerable<PropertyMeta> GetClassProps(Type type)
+        {
+            foreach(var parent in GetParents(type))
+            {
                 if(!IsInlineType(parent))
                     continue;
-
+               
                 foreach(var parentProp in GetClassProps(parent))
                     yield return parentProp;
             }
@@ -43,14 +46,62 @@ namespace CSharpDefinitions {
                 yield return CreatePropMeta(prop);
         }
 
+        IEnumerable<MethodMeta> GetClassMethods(Type type)
+        {
+            foreach(var parent in GetParents(type))
+            {   
+                foreach(var parentMethod in GetClassMethods(parent))
+                    yield return parentMethod;
+            }
+
+            foreach(var method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance).Where(t => !t.IsSpecialName))
+                yield return CreateMethodMeta(method);
+        }
+
         PropertyMeta CreatePropMeta(PropertyInfo prop) {
             var defaultValue = prop.GetCustomAttribute<DefaultValueAttribute>()?.Value;
             var propType = prop.PropertyType;
 
-            var aliasedType = GetAliasedType(propType);
+            return CreateMemberMeta(prop.Name.ToLowerCamelCase(), propType, defaultValue);
+        }
+
+
+        MethodMeta CreateMethodMeta(MethodInfo method)
+        {
+            var returnType = method.ReturnType;
+
+            var aliasedType = GetAliasedType(returnType);
             if(aliasedType != null) {
-                defaultValue = defaultValue ?? propType.GetCustomAttribute<DefaultValueAttribute>()?.Value;
-                propType = aliasedType;
+                returnType = aliasedType;
+            }          
+
+            return new MethodMeta(
+                method.Name.ToLowerCamelCase(),
+                GetTypeName(returnType),
+                GetParameters(method.GetParameters())
+            );
+        }
+
+        IEnumerable<PropertyMeta> GetParameters(ParameterInfo[] parameters)
+        {
+            foreach(var parameter in parameters)
+                yield return CreateParameterMeta(parameter);
+        }
+
+        PropertyMeta CreateParameterMeta(ParameterInfo param)
+        {
+            var defaultValue = param.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+            var propType = param.ParameterType;
+
+            return CreateMemberMeta(param.Name.ToLowerCamelCase(), propType, defaultValue);
+        }
+
+        PropertyMeta CreateMemberMeta(string name, Type type, object defaultValue)
+        {
+            var aliasedType = GetAliasedType(type);
+            if(aliasedType != null) {
+                defaultValue = defaultValue ?? type.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+                type = aliasedType;
             }
 
             if(defaultValue is Union)
@@ -58,18 +109,19 @@ namespace CSharpDefinitions {
 
             IEnumerable<PropertyMeta> nestedProps = null;
 
-            if(IsInlineType(propType)) {
-                nestedProps = GetClassProps(propType).OrderBy(p => p.Name).ToArray();
-                propType = typeof(object);
+            if(IsInlineType(type)) {
+                nestedProps = GetClassProps(type).OrderBy(p => p.Name).ToArray();
+                type = typeof(object);
             }
 
             return new PropertyMeta(
-                prop.Name.ToLowerCamelCase(),
-                GetPropTypes(propType).OrderBy(t => t),
+                name,
+                GetPropTypes(type).OrderBy(t => t),
                 defaultValue,
                 props: nestedProps
             );
         }
+
 
         IEnumerable<string> GetPropTypes(Type propType) {
             if((propType.GetInterface(nameof(ICollection))) != null) {

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Common;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -156,7 +157,10 @@ namespace Tests {
             var processor = new JSDoc.Processor();
             var meta = processor.GetMeta("dxChartSample.js");
 
-            var actual = new Serializer(meta).Serialize();
+            var actual = new Serializer(meta)
+                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default, p => p.Props)
+                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props, c => c.ParentType)
+                .Serialize();
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
 
@@ -171,7 +175,10 @@ namespace Tests {
                 typeof(CSharpSample.BarSeriesSettings)
             });
 
-            var actual = new Serializer(meta).Serialize();
+            var actual = new Serializer(meta)
+                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default, p => p.Props)
+                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props, c => c.ParentType)
+                .Serialize();
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
     }

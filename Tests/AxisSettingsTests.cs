@@ -151,7 +151,10 @@ namespace Tests {
             var processor = new JSDoc.Processor();
             var meta = processor.GetMeta("AxisSettings.js");
 
-            var actual = new Serializer(meta).Serialize();
+            var actual = new Serializer(meta)
+                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default, p => p.Props)
+                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props, c => c.ParentType)
+                .Serialize();
             var expected = Utils.NormalizeJson(EXPECTED);
             Assert.AreEqual(expected, actual);
         }

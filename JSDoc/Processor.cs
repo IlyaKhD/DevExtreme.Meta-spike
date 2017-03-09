@@ -33,6 +33,7 @@ namespace JSDoc {
                     new ClassMeta(
                         c.Value.Longname,
                         GetProps(c).OrderBy(p => p.Name),
+                        new MethodMeta[0],
                         c.Value.Augments?.FirstOrDefault()
                     )
                 );
