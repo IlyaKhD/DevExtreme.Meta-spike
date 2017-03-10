@@ -31,13 +31,11 @@ namespace CSharpDefinitions {
             );
         }
 
-        IEnumerable<PropertyMeta> GetClassProps(Type type)
-        {
-            foreach(var parent in GetParents(type))
-            {
+        IEnumerable<PropertyMeta> GetClassProps(Type type) {
+            foreach(var parent in GetParents(type)) {
                 if(!IsInlineType(parent))
                     continue;
-               
+
                 foreach(var parentProp in GetClassProps(parent))
                     yield return parentProp;
             }
@@ -46,16 +44,18 @@ namespace CSharpDefinitions {
                 yield return CreatePropMeta(prop);
         }
 
-        IEnumerable<MethodMeta> GetClassMethods(Type type)
-        {
-            foreach(var parent in GetParents(type))
-            {   
+        IEnumerable<MethodMeta> GetClassMethods(Type type) {
+            foreach(var parent in GetParents(type)) {
                 foreach(var parentMethod in GetClassMethods(parent))
                     yield return parentMethod;
             }
 
-            foreach(var method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance).Where(t => !t.IsSpecialName))
+            foreach(var method in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)) {
+                if(method.IsSpecialName)
+                    continue;
+
                 yield return CreateMethodMeta(method);
+            }
         }
 
         PropertyMeta CreatePropMeta(PropertyInfo prop) {
@@ -71,9 +71,8 @@ namespace CSharpDefinitions {
             var returnType = method.ReturnType;
 
             var aliasedType = GetAliasedType(returnType);
-            if(aliasedType != null) {
+            if(aliasedType != null)
                 returnType = aliasedType;
-            }          
 
             return new MethodMeta(
                 method.Name.ToLowerCamelCase(),
@@ -121,7 +120,6 @@ namespace CSharpDefinitions {
                 props: nestedProps
             );
         }
-
 
         IEnumerable<string> GetPropTypes(Type propType) {
             if((propType.GetInterface(nameof(ICollection))) != null) {
