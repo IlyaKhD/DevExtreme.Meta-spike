@@ -14,22 +14,33 @@ namespace Tests {
     internal class Serializer {
 
         readonly object _obj;
-        readonly List<MemberInfo> _allowedPropMetaAttrs;
+        readonly Dictionary<Type, List<MemberInfo>> _allowedMembers;
 
         public Serializer(object obj) {
             _obj = obj;
-            _allowedPropMetaAttrs = new List<MemberInfo>();
+            _allowedMembers = new Dictionary<Type, List<MemberInfo>>();
         }
 
-        public Serializer AllowOnly<T>(params Expression<Func<T, object>>[] expr) {
-            _allowedPropMetaAttrs.AddRange(expr.Select(GetMemberInfo));
+        public Serializer SelectProps<T>(params Expression<Func<T, object>>[] expr) {
+            var type = typeof(T);
+            if(!_allowedMembers.ContainsKey(type))
+                _allowedMembers[type] = new List<MemberInfo>();
+
+            _allowedMembers[type].AddRange(expr.Select(GetMemberInfo));
             return this;
         }
 
         public string Serialize() {
             return JsonConvert.SerializeObject(
                 _obj,
-                new JsonSerializerSettings { ContractResolver = new TestsContractResolver(_allowedPropMetaAttrs) }
+                new JsonSerializerSettings {
+                    ContractResolver = new TestsContractResolver(
+                        _allowedMembers.ToDictionary(
+                            m => m.Key,
+                            m => m.Value as IReadOnlyCollection<MemberInfo>
+                        )
+                    )
+                }
             );
         }
 
@@ -47,24 +58,18 @@ namespace Tests {
 
         class TestsContractResolver : DefaultContractResolver {
 
-            readonly MemberInfo[] _allowedPropMetaAttrs;
+            readonly Dictionary<Type, IReadOnlyCollection<MemberInfo>> _allowedMemebers;
 
-            public TestsContractResolver(IEnumerable<MemberInfo> allowedPropMetaAttrs) {
-                _allowedPropMetaAttrs = allowedPropMetaAttrs.ToArray();
+            public TestsContractResolver(IDictionary<Type, IReadOnlyCollection<MemberInfo>> allowedPropMetaAttrs) {
+                _allowedMemebers = new Dictionary<Type, IReadOnlyCollection<MemberInfo>>(allowedPropMetaAttrs);
             }
 
             protected override List<MemberInfo> GetSerializableMembers(Type objectType) {
-                return base.GetSerializableMembers(objectType).Where(IsNotIgnored).ToList();
-            }
+                var actualMembers = base.GetSerializableMembers(objectType);
+                if(!_allowedMemebers.ContainsKey(objectType))
+                    return actualMembers;
 
-            bool IsNotIgnored(MemberInfo member) {
-                if(member.MemberType != MemberTypes.Property && member.MemberType != MemberTypes.Field)
-                    return true;
-
-                if(_allowedPropMetaAttrs?.Length < 1)
-                    return true;
-
-                return _allowedPropMetaAttrs.Contains(member);
+                return _allowedMemebers[objectType].Where(m => actualMembers.Contains(m)).ToList();
             }
 
             protected override string ResolvePropertyName(string propertyName) => base.ResolvePropertyName(propertyName.ToLowerCamelCase());

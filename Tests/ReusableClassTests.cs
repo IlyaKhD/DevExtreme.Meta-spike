@@ -58,8 +58,8 @@ namespace Tests {
             var meta = processor.GetMeta(new[] { typeof(CSharpSample.label), typeof(CSharpSample.viz.font) });
 
             var actual = new Serializer(meta)
-                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
-                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props)
+                .SelectProps<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
+                .SelectProps<ClassMeta>(c => c.Name, c => c.Props)
                 .Serialize();
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(actual));
@@ -71,8 +71,8 @@ namespace Tests {
             var meta = processor.GetMeta("ReusableClass.js");
 
             var actual = new Serializer(meta)
-                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
-                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props)
+                .SelectProps<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default)
+                .SelectProps<ClassMeta>(c => c.Name, c => c.Props)
                 .Serialize();
 
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), Utils.NormalizeJson(actual));

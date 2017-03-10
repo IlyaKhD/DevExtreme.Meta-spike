@@ -163,7 +163,9 @@ namespace Tests {
             var meta = processor.GetMeta("dxChartSample.js");
 
             var actual = new Serializer(meta)
+                .SelectProps<ClassMeta>(c => c.Name, c => c.Props, c => c.Methods, c => c.ParentType)
                 .Serialize();
+
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
 
@@ -179,7 +181,9 @@ namespace Tests {
             });
 
             var actual = new Serializer(meta)
+                .SelectProps<ClassMeta>(c => c.Name, c => c.Props, c => c.Methods, c => c.ParentType)
                 .Serialize();
+
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
     }
