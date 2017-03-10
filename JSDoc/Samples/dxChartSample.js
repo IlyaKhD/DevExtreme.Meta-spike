@@ -31,6 +31,16 @@ var dxChart = {
     },
 
     /**
+     * @method
+     * @memberof dxChart
+     * @type dxChart
+     * @returns {dxChart} returns instance
+     */
+    instance: function () {
+        return "";
+    },
+
+    /**
      * @memberof dxChart
      * @type BarSeries|LineSeries|Array.<BarSeries|LineSeries>
      */
@@ -54,7 +64,7 @@ var LineSeries = {
      * @default line
      */
     type
-}
+};
 
 /**
  * @class
@@ -73,7 +83,7 @@ var BarSeries = {
      * @default bar
      */
     type
-}
+};
 
 /**
  * @class LineSeriesSettings

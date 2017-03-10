@@ -33,7 +33,7 @@ namespace JSDoc {
                     new ClassMeta(
                         c.Value.Longname,
                         GetProps(c).OrderBy(p => p.Name),
-                        new MethodMeta[0],
+                        GetMethods(c).OrderBy(p => p.Name),
                         c.Value.Augments?.FirstOrDefault()
                     )
                 );
@@ -84,6 +84,19 @@ namespace JSDoc {
                 return $"array<{match.Groups["type"]}>";
 
             return type;
+        }
+
+        static IEnumerable<MethodMeta> GetMethods(Hierarchy<JSDocEntry>.Entry entry) {
+            foreach(var nestedEntry in entry.NestedEntries) {
+                if(nestedEntry.Value.Kind == "function") {
+                    yield return GetMethodMeta(nestedEntry);
+                }
+            }
+        }
+
+        static MethodMeta GetMethodMeta(Hierarchy<JSDocEntry>.Entry entry) {
+            var types = entry.Value.Type.Names?.Select(GetTypeName)?.OrderBy(t => t);
+            return new MethodMeta(entry.Value.Name, types.ToArray()[0].ToString());
         }
 
         struct JSDocEntry {

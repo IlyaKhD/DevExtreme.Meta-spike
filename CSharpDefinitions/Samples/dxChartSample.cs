@@ -11,6 +11,7 @@ namespace CSharpDefinitions.Samples.dxChartSample {
 
         CommonSeriesSettings commonSeriesSettings { get; }
         Union<BarSeries, LineSeries, Union<BarSeries, LineSeries>[]> series { get; }
+        dxChart instance();
     }
 
     [InjectedType]

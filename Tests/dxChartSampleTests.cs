@@ -70,6 +70,7 @@ namespace Tests {
                             ""props"": null
                         }
                     ],
+                    ""methods"": [{""name"":""instance"",""returnType"":""dxChart"",""args"":null}],
                     ""parentType"": null
                 },
                 {
@@ -89,6 +90,7 @@ namespace Tests {
                             ""props"": null
                         }
                     ],
+                    ""methods"": [],
                     ""parentType"": ""LineSeriesSettings""
                 },
                 {
@@ -108,6 +110,7 @@ namespace Tests {
                             ""props"": null
                         }
                     ],
+                    ""methods"": [],
                     ""parentType"": ""BarSeriesSettings""
                 },
                 {
@@ -127,6 +130,7 @@ namespace Tests {
                             ""props"": null
                         }
                     ],
+                    ""methods"": [],
                     ""parentType"": null
                 },
                 {
@@ -146,6 +150,7 @@ namespace Tests {
                             ""props"": null
                         }
                     ],
+                    ""methods"": [],
                     ""parentType"": null
                 }
             ]
@@ -158,8 +163,6 @@ namespace Tests {
             var meta = processor.GetMeta("dxChartSample.js");
 
             var actual = new Serializer(meta)
-                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default, p => p.Props)
-                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props, c => c.ParentType)
                 .Serialize();
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
@@ -176,8 +179,6 @@ namespace Tests {
             });
 
             var actual = new Serializer(meta)
-                .AllowOnly<PropertyMeta>(p => p.Name, p => p.Types, p => p.Default, p => p.Props)
-                .AllowOnly<ClassMeta>(c => c.Name, c => c.Props, c => c.ParentType)
                 .Serialize();
             Assert.AreEqual(Utils.NormalizeJson(EXPECTED), actual);
         }
